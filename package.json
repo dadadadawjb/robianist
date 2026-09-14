@@ -1,0 +1,32 @@
+{
+  "name": "robo-piano",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --experimental-strip-types --test --test-isolation=none tests/*.test.ts"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.0",
+    "@react-three/fiber": "^9.3.0",
+    "lucide-react": "^0.468.0",
+    "next": "^15.5.12",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "three": "^0.180.0",
+    "urdf-loader": "^0.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.180.0",
+    "typescript": "^5.9.2"
+  },
+  "type": "module",
+  "overrides": {
+    "postcss": "^8.5.23"
+  }
+}
