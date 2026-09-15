@@ -7,6 +7,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { createChainIK } from '@/lib/arm-ik';
+import { assetUrl } from '@/lib/asset-url';
 import { isBlack,keyX } from '@/lib/music';
 import type { FingerNote } from '@/lib/fingering';
 import type { ArmRig,HandPreset,Side } from '@/lib/presets';
@@ -14,6 +15,7 @@ const cache=new Map<string,Promise<URDFRobot>>();
 function load(url:string) {
   if(!cache.has(url))cache.set(url,new Promise((resolve,reject)=>{
     const manager=new THREE.LoadingManager(),loader=new URDFLoader(manager);loader.parseCollision=false;
+    manager.setURLModifier(assetUrl);
     const original=loader.defaultMeshLoader.bind(loader);
     loader.loadMeshCb=(path,mgr,material,done)=>{
       if(/\.glb$/i.test(path))new GLTFLoader(mgr).load(path,g=>done(g.scene),undefined,reject);
@@ -22,7 +24,7 @@ function load(url:string) {
     };
     let model:URDFRobot;manager.onLoad=()=>resolve(model);manager.onError=p=>reject(new Error(`Model resource failed: ${p}`));
     manager.itemStart(url);
-    fetch(url).then(r=>{if(!r.ok)throw new Error(`Model ${r.status}: ${url}`);return r.text();}).then(xml=>{loader.workingPath=url.includes('/vendor/')?'':url.slice(0,url.lastIndexOf('/')+1);model=loader.parse(xml);manager.itemEnd(url);}).catch(reject);
+    fetch(assetUrl(url)).then(r=>{if(!r.ok)throw new Error(`Model ${r.status}: ${url}`);return r.text();}).then(xml=>{loader.workingPath=url.includes('/vendor/')?'':url.slice(0,url.lastIndexOf('/')+1);model=loader.parse(xml);manager.itemEnd(url);}).catch(reject);
   }));return cache.get(url)!;
 }
 function useModel(url:string) {

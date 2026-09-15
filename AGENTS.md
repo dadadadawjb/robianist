@@ -67,6 +67,9 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - Whenever the codes are modified, check whether README.md needs updates for user-facing setup.
 
 ## Code Structure
+- `.github/workflows/`: GitHub Pages build and deployment automation.
+- `next.config.mjs`: static export and deployment base path.
+- `lib/asset-url.ts`: model URL prefix for subpath hosting.
 - `app/`: Next.js page, root layout, global styles and icon.
 - `components/`: scene, grand piano, official URDF assets and lightweight robot geometry.
 - `lib/`: song events, hardware preset types and Web Audio transport.
@@ -78,6 +81,10 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `tests/`: asset reference, fingering, music event, keyboard mapping and IK checks.
 
 ## Important Files
+- `.github/workflows/pages.yml`: test, export and publish on pushes to main.
+- `next.config.mjs`: static export configuration.
+- `lib/asset-url.ts`: shared URDF and mesh URL adaptation.
+- `tests/asset-url.test.ts`: root and subpath model URL checks.
 - `app/page.tsx`: configuration UI and playback controls.
 - `components/Scene.tsx`: note-driven animation, presets and camera views.
 - `components/GrandPiano.tsx`: 88 independent keys and a Steinway-style grand piano body.

@@ -34,8 +34,17 @@ Open http://localhost:3000. Production and checks:
 ```sh
 npm test
 npm run build
-npm start
 ```
+
+The production build exports a static site to `out/`. Serve that directory with a static HTTP server; `next start` is not supported with static export.
+
+### GitHub Pages
+
+Push this repository to GitHub with `main` as the deployment branch. In **Settings > Pages > Build and deployment**, set **Source** to **GitHub Actions**. The **Deploy GitHub Pages** workflow tests, builds and publishes `out/` on every push to `main`; it can also be started manually from the **Actions** tab after Pages is enabled.
+
+The workflow reads the deployment base path from GitHub Pages, including repository subpaths such as `/robianist`. Model URDFs, meshes and textures use the same prefix. Local development defaults to the root path. If your default branch has another name, update `on.push.branches` in `.github/workflows/pages.yml`.
+
+After the workflow succeeds, open the site link in **Settings > Pages**. Ensure the files under `public/models/` are committed so they are included in the published site.
 
 Models are included under `public/models/`. To fetch the pinned upstream visual resources again (requires internet and GitHub API access):
 
