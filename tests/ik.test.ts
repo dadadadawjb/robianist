@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { URDFRobot, URDFJoint, URDFLink } from 'urdf-loader/src/URDFClasses.js';
-import { createArmIK } from '../lib/arm-ik.ts';
+import { createArmIK, createChainIK } from '../lib/arm-ik.ts';
 
 test('URDF to CCD adapter reaches a piano target while respecting joint limits',()=>{
   const robot=new URDFRobot();robot.joints={};robot.links={};let parent:THREE.Object3D=robot;
@@ -17,3 +17,12 @@ test('URDF to CCD adapter reaches a piano target while respecting joint limits',
   for(let i=1;i<=7;i++){const joint=robot.joints[`panda_joint${i}`];assert.ok(joint.angle>=joint.limit.lower-1e-8&&joint.angle<=joint.limit.upper+1e-8);}
 });
 
+
+test('arbitrary local joint axes reach a target',()=>{
+  const robot=new URDFRobot();robot.joints={};robot.links={};let parent:THREE.Object3D=robot;
+  for(let i=0;i<2;i++){const j=new URDFJoint();j.jointType='revolute';j.axis.set(0,1,0);j.position.z=i*.3;j.limit.lower=-2;j.limit.upper=2;parent.add(j);const link=new URDFLink();j.add(link);robot.joints['j'+i]=j;robot.links['link'+i]=link;parent=link;}
+  const tip=new URDFLink();tip.position.z=.3;parent.add(tip);robot.links.tip=tip;
+  const ik=createChainIK(robot,'tip',['j0','j1'],[.2,.6]);const target=new THREE.Vector3(.3,0,.45);
+  for(let i=0;i<50;i++)ik.update(target);robot.updateMatrixWorld(true);
+  assert.ok(tip.getWorldPosition(new THREE.Vector3()).distanceTo(target)<.015);
+});

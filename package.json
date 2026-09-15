@@ -1,5 +1,5 @@
 {
-  "name": "robo-piano",
+  "name": "robianist",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@types/three": "^0.180.0",
+    "@xmldom/xmldom": "^0.9.12",
     "typescript": "^5.9.2"
   },
   "type": "module",

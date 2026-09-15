@@ -61,6 +61,8 @@ This project is implementing a demo web page showing a robot playing a piano.
 Maybe use Next.js + React + Three.js / React Three Fiber.
 
 ## Maintenance Rules
+- Keep authored UI, comments and documentation in English.
+- Include `Co-authored-by: Codex <codex@openai.com>` in future commits.
 - Whenever the code structure is changed, added to, or deleted from, update the "Code Structure" and "Important Files" sections in this file at the same time.
 - Whenever the codes are modified, check whether README.md needs updates for user-facing setup.
 
@@ -68,20 +70,24 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `app/`: Next.js page, root layout, global styles and icon.
 - `components/`: scene, grand piano, official URDF assets and lightweight robot geometry.
 - `lib/`: song events, hardware preset types and Web Audio transport.
-- `lib/arm-ik.ts`: URDF joint adapter for Three.js CCDIKSolver.
+- `lib/arm-ik.ts`: arbitrary-axis URDF joint adapter for Three.js CCDIKSolver.
+- `lib/fingering.ts`: simultaneous and sustained note finger assignment.
+- `scripts/fetch-models.mjs`: pinned upstream visual model downloads.
 - `public/models/`: official source meshes, URDFs and license notices.
 - `scripts/prepare-franka.mjs`: derive the browser visual URDF from official xacro origins.
-- `tests/`: music event, keyboard mapping and IK checks.
+- `tests/`: asset reference, fingering, music event, keyboard mapping and IK checks.
 
 ## Important Files
 - `app/page.tsx`: configuration UI and playback controls.
 - `components/Scene.tsx`: note-driven animation, presets and camera views.
 - `components/GrandPiano.tsx`: 88 independent keys and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: urdf-loader asset cache and articulated robot/hand rendering.
-- `lib/arm-ik.ts`: library-based IK for the imported Franka rig.
-- `lib/music.ts`: normalized note timeline and built-in public-domain melodies.
+- `lib/arm-ik.ts`: library-based IK for imported arm and hand chains.
+- `lib/music.ts`: normalized note timeline, public-domain melodies and original chord study.
+- `lib/fingering.ts`: sustained-note reservations and pitch-ordered finger assignment.
+- `scripts/fetch-models.mjs`: pinned manufacturer and converted visual asset downloads.
 - `lib/player.ts`: audio-clock playback, seeking, pause and per-note synthesis.
-- `lib/presets.ts`: independent robot/hand configuration and future model asset descriptors.
+- `lib/presets.ts`: independent robot/hand configuration and left/right model descriptors.
 - `README.md`: setup, supported features and extension boundaries.
 - `ASSETS.md`: third-party sources, licenses and asset limitations.
 
