@@ -70,11 +70,15 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `.github/workflows/`: GitHub Pages build and deployment automation.
 - `next.config.mjs`: static export and deployment base path.
 - `lib/asset-url.ts`: model URL prefix for subpath hosting.
-- `app/`: Next.js page, root layout, global styles and icon.
-- `components/`: scene, grand piano, official URDF assets and lightweight robot geometry.
+- `app/`: Next.js page, root layout, global styles and generated robot-piano icon.
+- `components/`: scene, grand piano, official URDF assets and live sheet music.
 - `lib/`: song events, hardware preset types and Web Audio transport.
+- `lib/audio.ts`: bounded lookahead audio scheduling and voice cleanup.
 - `lib/arm-ik.ts`: arbitrary-axis URDF joint adapter for Three.js CCDIKSolver.
-- `lib/fingering.ts`: simultaneous and sustained note finger assignment.
+- `lib/fingering.ts`: visual finger contacts with approximate substitutions and sustained early releases.
+- `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
+- `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
+- `output/musicxml/`: user-provided PDF recognition draft and outstanding correction notes.
 - `scripts/fetch-models.mjs`: pinned upstream visual model downloads.
 - `public/models/`: official source meshes, URDFs and license notices.
 - `scripts/prepare-franka.mjs`: derive the browser visual URDF from official xacro origins.
@@ -87,13 +91,21 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `tests/asset-url.test.ts`: root and subpath model URL checks.
 - `app/page.tsx`: configuration UI and playback controls.
 - `components/Scene.tsx`: note-driven animation, presets and camera views.
+- `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
 - `components/GrandPiano.tsx`: 88 independent keys and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: urdf-loader asset cache and articulated robot/hand rendering.
 - `lib/arm-ik.ts`: library-based IK for imported arm and hand chains.
-- `lib/music.ts`: normalized note timeline, public-domain melodies and original chord study.
-- `lib/fingering.ts`: sustained-note reservations and pitch-ordered finger assignment.
+- `lib/music.ts`: normalized score types and keyboard mapping.
+- `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
+- `lib/builtin-scores.ts`: Human Light (default, Easy) and If Only... (Hard) metadata.
+- `public/scores/HumanLight.mxl`, `public/scores/IfOnly.mxl`: original compressed preset scores.
+- `tests/score.test.ts`: compressed imports, shared timing and preset consistency.
+- `public/logo.png`, `app/icon.png`: generated robot-head and keyboard logo.
+- `output/musicxml/README.md`: incomplete If Only transcription status and review requirements.
+- `lib/fingering.ts`: pitch-ordered finger assignment, approximate substitutions and sustained early releases.
 - `scripts/fetch-models.mjs`: pinned manufacturer and converted visual asset downloads.
-- `lib/player.ts`: audio-clock playback, seeking, pause and per-note synthesis.
+- `lib/player.ts`: audio-clock playback, seeking and pause.
+- `lib/audio.ts`, `tests/audio.test.ts`: incremental per-note synthesis and opening/seek/cleanup regressions.
 - `lib/presets.ts`: independent robot/hand configuration and left/right model descriptors.
 - `README.md`: setup, supported features and extension boundaries.
 - `ASSETS.md`: third-party sources, licenses and asset limitations.

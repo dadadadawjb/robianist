@@ -1,0 +1,590 @@
+WARN  []                WellKnowns 238  | Error creating C:\Users\JunboWang\AppData\Roaming\AudiverisLtd\audiveris\log
+java.nio.file.AccessDeniedException: C:\Users\JunboWang\AppData\Roaming\AudiverisLtd
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createAndCheckIsDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectories(Unknown Source)
+	at org.audiveris.omr.WellKnowns.createFolder(WellKnowns.java:235)
+	at org.audiveris.omr.WellKnowns.<clinit>(WellKnowns.java:190)
+	at org.audiveris.omr.Main.<clinit>(Main.java:70)
+	at Audiveris.main(Audiveris.java:50)
+WARN  []                WellKnowns 238  | Error creating C:\Users\JunboWang\AppData\Roaming\AudiverisLtd\audiveris\log\temp
+java.nio.file.AccessDeniedException: C:\Users\JunboWang\AppData\Roaming\AudiverisLtd
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createAndCheckIsDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectories(Unknown Source)
+	at org.audiveris.omr.WellKnowns.createFolder(WellKnowns.java:235)
+	at org.audiveris.omr.WellKnowns.<clinit>(WellKnowns.java:196)
+	at org.audiveris.omr.Main.<clinit>(Main.java:70)
+	at Audiveris.main(Audiveris.java:50)
+INFO  []                      Main 259  | Running in batch mode
+INFO  []              TesseractOCR 137  | Creating OCR folder C:\Users\JunboWang\AppData\Roaming\AudiverisLtd\audiveris\config\tessdata
+WARN  []              TesseractOCR 140  | Could not create folder C:\Users\JunboWang\AppData\Roaming\AudiverisLtd\audiveris\config\tessdata {}
+java.nio.file.AccessDeniedException: C:\Users\JunboWang\AppData\Roaming\AudiverisLtd
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createAndCheckIsDirectory(Unknown Source)
+	at java.base/java.nio.file.Files.createDirectories(Unknown Source)
+	at org.audiveris.omr.text.tesseract.TesseractOCR.findOcrFolder(TesseractOCR.java:138)
+	at org.audiveris.omr.text.tesseract.TesseractOCR.getOcrFolder(TesseractOCR.java:228)
+	at org.audiveris.omr.text.tesseract.TesseractOCR.isAvailable(TesseractOCR.java:253)
+	at org.audiveris.omr.text.tesseract.TesseractOCR.getSupportedLanguages(TesseractOCR.java:155)
+	at org.audiveris.omr.text.tesseract.Languages.checkSupport(Languages.java:136)
+	at org.audiveris.omr.Main.main(Main.java:266)
+	at Audiveris.main(Audiveris.java:50)
+WARN  []              TesseractOCR 144  | Tesseract data could not be found. Try setting TESSDATA_PREFIX environment variable to point to tessdata folder.
+WARN  []                 Languages 142  | *** No installed OCR languages ***
+INFO  []             AliasPatterns 146  | Alias patterns: [(IMSLP[0-9]*)-.*]
+INFO  []                      Main 194  | Submitting 1 task(s) in sequence:
+    Input "E:\Repositories\robianist\tmp\pdfs\clean-score.tif"
+INFO  [clean-score]                      Book 560  | 7 sheets in E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  []                      Book 2565 | Stored /book.xml
+INFO  []                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  []                      Book 1929 | Book reaching PAGE on sheets:[#1#2#3#4#5#6#7]
+INFO  [clean-score#1]            StepMonitoring 98   | LOAD
+INFO  [clean-score#1]                 SheetStub 1278 | Loaded image #1 2299x3251 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#1]            StepMonitoring 98   | BINARY
+INFO  [clean-score#1]            StepMonitoring 98   | SCALE
+INFO  [clean-score#1]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#1]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 557% of needed quorum
+INFO  [clean-score#1]              ScaleBuilder 401  | Normalized black jitter: 10.53 %
+INFO  [clean-score#1]                 ScaleStep 65   | Scale{ interline(19,19,20) line(1,2,3) beam(10)}
+INFO  [clean-score#1]            StepMonitoring 98   | GRID
+INFO  [clean-score#1]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#1]         ClustersRetriever 326  | Retrieved raw line clusters: 8 of sizes [5] with interline(19,19,20)
+INFO  [clean-score#1]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8]
+INFO  [clean-score#1]             SystemManager 800  | 1 part along 4 systems
+INFO  [clean-score#1]                      Book 543  | Created scores: [{Score 1}]
+INFO  [clean-score#1]            StepMonitoring 98   | HEADERS
+INFO  [clean-score#1]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#1]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#1]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#1]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#1]            StepMonitoring 98   | HEADS
+INFO  [clean-score#1]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.2,R:0.3]}
+INFO  [clean-score#1]            StepMonitoring 98   | STEMS
+INFO  [clean-score#1]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#1]             ReductionStep 105  | Stems free length median value: 65 pixels, 3.4 interlines
+INFO  [clean-score#1]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#1]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#1]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#1]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#1]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#1]                      Page 307  | 13 raw measures: [4 in system#1, 3 in system#2, 3 in system#3, 3 in system#4]
+INFO  [clean-score#1]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#1]            StepMonitoring 98   | CURVES
+INFO  [clean-score#1]              SlursBuilder 240  | Slurs: 9
+INFO  [clean-score#1]           SegmentsBuilder 155  | Segments: 9
+INFO  [clean-score#1]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#1]            StepMonitoring 98   | LINKS
+INFO  [clean-score#1]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#5554{(0.602) staff:2 OTTAVA BASSA} at java.awt.Point[x=1504,y=1217]
+INFO  [clean-score#1]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#5635{(0.640) staff:4 OTTAVA BASSA} at java.awt.Point[x=251,y=1891]
+INFO  [clean-score#1]                  KeyInter 1198 | No effective key before AlterInter#5720{(0.248) staff:4 NATURAL pitch:-1.0}
+INFO  [clean-score#1]                  KeyInter 1198 | No effective key before AlterInter#5810{(0.295) staff:4 NATURAL pitch:-1.0}
+INFO  [clean-score#1]                  KeyInter 1198 | No effective key before AlterInter#5885{(0.296) staff:4 NATURAL pitch:3.0}
+INFO  [clean-score#1]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#5912{(0.640) staff:5 OTTAVA ALTA} at java.awt.Point[x=251,y=1891]
+INFO  [clean-score#1]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#1]             MeasureRhythm 1044 | Measure{#3} No timeOffset for HeadChordInter#4545{(0.916/0.916) staff:1 slot#10 dur:1/8}
+INFO  [clean-score#1]                     Voice 257  | Measure{#3} Voice{#1 excess:1/4} too long
+INFO  [clean-score#1]               StackRhythm 224  | S1 MeasureStack#3 no correct rhythm
+INFO  [clean-score#1]             MeasureRhythm 1276 | Measure{#5} Time inconsistency in {1/8=[HeadChordInter#4559{(0.952/0.952) staff:3 slot#3 off:1/8 dur:1/16}], 3/8=[HeadChordInter#4588{(0.913/0.913) staff:4 slot#3 off:3/8 dur:1/16}]}
+INFO  [clean-score#1]             MeasureRhythm 1276 | Measure{#5} Time inconsistency in {3/16=[HeadChordInter#4560{(0.883/0.883) staff:3 slot#4 off:3/16 dur:1/16}], 7/16=[HeadChordInter#4589{(0.929/0.929) staff:4 slot#4 off:7/16 dur:1/16}]}
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#5 excess:1/4} too long
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#6 excess:1/4} too long
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#7 excess:1/4} too long
+INFO  [clean-score#1]               StackRhythm 224  | S2 MeasureStack#5 no correct rhythm
+INFO  [clean-score#1]             MeasureRhythm 1044 | Measure{#7} No timeOffset for HeadChordInter#4606{(0.585/0.585) staff:4 slot#2 dur:1/2}
+INFO  [clean-score#1]        AbstractChordInter 635  | Measure{#7} No timeOffset for HeadChordInter#4606{(0.585/0.585) staff:4 slot#2 dur:1/2}
+INFO  [clean-score#1]        AbstractChordInter 635  | Measure{#7} No timeOffset for HeadChordInter#4606{(0.585/0.585) staff:4 slot#2 dur:1/2}
+INFO  [clean-score#1]        AbstractChordInter 635  | Measure{#7} No timeOffset for HeadChordInter#4613{(0.947/0.947) staff:4 slot#9 dur:1/16}
+INFO  [clean-score#1]               StackRhythm 224  | S2 MeasureStack#7 no correct rhythm
+INFO  [clean-score#1]             MeasureRhythm 1044 | Measure{#8} No timeOffset for HeadChordInter#4635{(0.594/0.594) staff:6 slot#2 dur:1/4}
+INFO  [clean-score#1]        AbstractChordInter 635  | Measure{#8} No timeOffset for HeadChordInter#4635{(0.594/0.594) staff:6 slot#2 dur:1/4}
+INFO  [clean-score#1]        AbstractChordInter 635  | Measure{#8} No timeOffset for HeadChordInter#4639{(0.912/0.912) staff:6 slot#6 dur:1/8}
+INFO  [clean-score#1]               StackRhythm 224  | S3 MeasureStack#8 no correct rhythm
+INFO  [clean-score#1]            StepMonitoring 98   | PAGE
+INFO  [clean-score#1]                     Voice 257  | Measure{#3} Voice{#1 excess:1/4} too long
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#5 excess:1/4} too long
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#6 excess:1/4} too long
+INFO  [clean-score#1]                     Voice 257  | Measure{#5} Voice{#5 excess:1/4} too long
+INFO  [clean-score#1]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#1]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#1]                DataHolder 348  | Stored /sheet#1/BINARY.png
+INFO  [clean-score#1]                     Sheet 1583 | Stored /sheet#1/sheet#1.xml
+INFO  [clean-score#1]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#1]                 SheetStub 1655 | Sheet#1 disposed
+INFO  [clean-score#1]                      Book 2050 | End of Stub#1
+INFO  [clean-score#2]            StepMonitoring 98   | LOAD
+INFO  [clean-score#2]                 SheetStub 1278 | Loaded image #2 2299x3248 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#2]            StepMonitoring 98   | BINARY
+INFO  [clean-score#2]            StepMonitoring 98   | SCALE
+INFO  [clean-score#2]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#2]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 722% of needed quorum
+INFO  [clean-score#2]              ScaleBuilder 401  | Normalized black jitter: 15.79 %
+INFO  [clean-score#2]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,1,4) beam(10)}
+INFO  [clean-score#2]            StepMonitoring 98   | GRID
+INFO  [clean-score#2]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#2]         ClustersRetriever 326  | Retrieved raw line clusters: 9 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#2]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5] #4[6, 7] #5[8, 9]
+INFO  [clean-score#2]             SystemManager 800  | 2 parts along 5 systems
+INFO  [clean-score#2]            StepMonitoring 98   | HEADERS
+INFO  [clean-score#2]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#2]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#2]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#2]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#2]            StepMonitoring 98   | HEADS
+INFO  [clean-score#2]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.3,R:0.2]}
+INFO  [clean-score#2]            StepMonitoring 98   | STEMS
+INFO  [clean-score#2]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#2]             ReductionStep 105  | Stems free length median value: 67 pixels, 3.5 interlines
+INFO  [clean-score#2]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#2]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#2]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#2]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#2]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#2]           MeasuresBuilder 416  | S1 partial barline column: s1:G(x:241,y:374)[152]
+INFO  [clean-score#2]           MeasuresBuilder 428  | S1 deleting   half column: s1:G(x:241,y:374)[152]
+INFO  [clean-score#2]           MeasuresBuilder 416  | S1 partial barline column: s2:G(x:1344,y:632)[153]
+INFO  [clean-score#2]           MeasuresBuilder 428  | S1 deleting   half column: s2:G(x:1344,y:632)[153]
+INFO  [clean-score#2]           MeasuresBuilder 416  | S4 partial barline column: s7:G(x:1378,y:2388)[68]
+INFO  [clean-score#2]           MeasuresBuilder 428  | S4 deleting   half column: s7:G(x:1378,y:2388)[68]
+INFO  [clean-score#2]                      Page 307  | 12 raw measures: [2 in system#1, 3 in system#2, 1 in system#3, 3 in system#4, 3 in system#5]
+INFO  [clean-score#2]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#2]            StepMonitoring 98   | CURVES
+INFO  [clean-score#2]              SlursBuilder 240  | Slurs: 33
+INFO  [clean-score#2]           SegmentsBuilder 155  | Segments: 28
+INFO  [clean-score#2]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#2]            StepMonitoring 98   | LINKS
+INFO  [clean-score#2]                  KeyInter 1198 | No effective key before AlterInter#7452{(0.794) staff:8 NATURAL pitch:2.0}
+INFO  [clean-score#2]                  KeyInter 1198 | No effective key before AlterInter#7454{(0.792) staff:9 NATURAL pitch:4.0}
+INFO  [clean-score#2]                  KeyInter 1198 | No effective key before AlterInter#7463{(0.798) staff:9 NATURAL pitch:-3.0}
+INFO  [clean-score#2]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#2]                PageRhythm 199  | {Page#2.1} Time value reused from sheet#1
+INFO  [clean-score#2]             MeasureRhythm 1044 | Measure{#1P1} No timeOffset for HeadChordInter#5848{(0.914/0.914) staff:1 slot#8 dur:1/8}
+INFO  [clean-score#2]        AbstractChordInter 635  | Measure{#1P1} No timeOffset for HeadChordInter#5851{(0.868/0.868) staff:1 slot#11 dur:1/2}
+INFO  [clean-score#2]                     Voice 257  | Measure{#1P1} Voice{#1 excess:1/4} too long
+INFO  [clean-score#2]               StackRhythm 224  | S1 MeasureStack#1 no correct rhythm
+INFO  [clean-score#2]             MeasureRhythm 1044 | Measure{#6} No timeOffset for HeadChordInter#5926{(0.953/0.953) staff:5 slot#8 dur:1/8}
+INFO  [clean-score#2]        AbstractChordInter 635  | Measure{#6} No timeOffset for HeadChordInter#5935{(0.954/0.954) staff:5 slot#17 dur:1/4}
+INFO  [clean-score#2]                     Voice 257  | Measure{#6} Voice{#1 excess:1/2} too long
+INFO  [clean-score#2]               StackRhythm 224  | S3 MeasureStack#6 no correct rhythm
+INFO  [clean-score#2]                     Voice 257  | Measure{#8} Voice{#6 excess:1/8} too long
+INFO  [clean-score#2]               StackRhythm 224  | S4 MeasureStack#8 no correct rhythm
+INFO  [clean-score#2]             MeasureRhythm 1044 | Measure{#11} No timeOffset for RestChordInter#7484{(0.788/0.788) staff:8 slot#13 dur:1/2}
+INFO  [clean-score#2]               StackRhythm 224  | S5 MeasureStack#11 no correct rhythm
+INFO  [clean-score#2]            StepMonitoring 98   | PAGE
+INFO  [clean-score#2]            SheetReduction 154  | Gutter. Different glyphs 3/4 WedgeInter#6637{(0.743/0.743) CRESCENDO} vs EndingInter#6641{(0.724/0.936) staff:6 ENDING_WRL}
+INFO  [clean-score#2]            SheetReduction 154  | Gutter. Different glyphs 3/4 DynamicsInter#7355{(0.795/0.929) DYNAMICS_MF} vs EndingInter#6641{(0.724/0.936) staff:6 ENDING_WRL}
+INFO  [clean-score#2]            SheetReduction 154  | Gutter. Different glyphs 3/4 BeamInter#1499{(0.694/0.964) BEAM} vs EndingInter#6641{(0.724/0.936) staff:6 ENDING_WRL}
+INFO  [clean-score#2]                     Voice 257  | Measure{#1P1} Voice{#1 excess:1/4} too long
+INFO  [clean-score#2]                     Voice 257  | Measure{#6} Voice{#1 excess:1/2} too long
+INFO  [clean-score#2]                     Voice 257  | Measure{#8} Voice{#6 excess:1/8} too long
+INFO  [clean-score#2]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#2]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#2]                DataHolder 348  | Stored /sheet#2/BINARY.png
+INFO  [clean-score#2]                     Sheet 1583 | Stored /sheet#2/sheet#2.xml
+INFO  [clean-score#2]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#2]                 SheetStub 1655 | Sheet#2 disposed
+INFO  [clean-score#2]                      Book 2050 | End of Stub#2
+INFO  [clean-score#3]            StepMonitoring 98   | LOAD
+INFO  [clean-score#3]                 SheetStub 1278 | Loaded image #3 2299x3246 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#3]            StepMonitoring 98   | BINARY
+INFO  [clean-score#3]            StepMonitoring 98   | SCALE
+INFO  [clean-score#3]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#3]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 809% of needed quorum
+INFO  [clean-score#3]              ScaleBuilder 401  | Normalized black jitter: 10.53 %
+INFO  [clean-score#3]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,1,3) beam(10)}
+INFO  [clean-score#3]            StepMonitoring 98   | GRID
+INFO  [clean-score#3]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#3]         ClustersRetriever 326  | Retrieved raw line clusters: 7 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#3]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7]
+INFO  [clean-score#3]             SystemManager 800  | 1 part along 4 systems
+INFO  [clean-score#3]            StepMonitoring 98   | HEADERS
+INFO  [clean-score#3]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#3]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#3]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#3]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#3]            StepMonitoring 98   | HEADS
+INFO  [clean-score#3]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.1,R:0.1]}
+INFO  [clean-score#3]            StepMonitoring 98   | STEMS
+INFO  [clean-score#3]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#3]             ReductionStep 105  | Stems free length median value: 66 pixels, 3.5 interlines
+INFO  [clean-score#3]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#3]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#3]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#3]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#3]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#3]                      Page 307  | 10 raw measures: [3 in system#1, 3 in system#2, 3 in system#3, 1 in system#4]
+INFO  [clean-score#3]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#3]            StepMonitoring 98   | CURVES
+INFO  [clean-score#3]              SlursBuilder 240  | Slurs: 37
+INFO  [clean-score#3]           SegmentsBuilder 155  | Segments: 15
+INFO  [clean-score#3]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#3]            StepMonitoring 98   | LINKS
+INFO  [clean-score#3]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6897{(0.634) staff:4 OTTAVA BASSA} at java.awt.Point[x=273,y=2027]
+INFO  [clean-score#3]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6939{(0.634) staff:5 OTTAVA ALTA} at java.awt.Point[x=273,y=2027]
+INFO  [clean-score#3]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#3]                PageRhythm 199  | {Page#3.1} Time value reused from sheet#1
+INFO  [clean-score#3]             MeasureRhythm 1044 | Measure{#10} No timeOffset for HeadChordInter#5757{(0.911/0.911) staff:7 slot#13 dur:1/16}
+INFO  [clean-score#3]                     Voice 257  | Measure{#10} Voice{#1 excess:3/4} too long
+INFO  [clean-score#3]               StackRhythm 224  | S4 MeasureStack#10 no correct rhythm
+INFO  [clean-score#3]            StepMonitoring 98   | PAGE
+INFO  [clean-score#3]                     Voice 257  | Measure{#10} Voice{#1 excess:3/4} too long
+INFO  [clean-score#3]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#3]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#3]                DataHolder 348  | Stored /sheet#3/BINARY.png
+INFO  [clean-score#3]                     Sheet 1583 | Stored /sheet#3/sheet#3.xml
+INFO  [clean-score#3]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#3]                 SheetStub 1655 | Sheet#3 disposed
+INFO  [clean-score#3]                      Book 2050 | End of Stub#3
+INFO  [clean-score#4]            StepMonitoring 98   | LOAD
+INFO  [clean-score#4]                 SheetStub 1278 | Loaded image #4 2299x3248 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#4]            StepMonitoring 98   | BINARY
+INFO  [clean-score#4]            StepMonitoring 98   | SCALE
+INFO  [clean-score#4]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#4]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 846% of needed quorum
+INFO  [clean-score#4]              ScaleBuilder 401  | Normalized black jitter: 15.79 %
+INFO  [clean-score#4]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,2,4) beam(10)}
+INFO  [clean-score#4]            StepMonitoring 98   | GRID
+INFO  [clean-score#4]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#4]         ClustersRetriever 326  | Retrieved raw line clusters: 10 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#4]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10]
+INFO  [clean-score#4]             SystemManager 800  | 1 part along 5 systems
+INFO  [clean-score#4]            StepMonitoring 98   | HEADERS
+INFO  [clean-score#4]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#4]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#4]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#4]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#4]            StepMonitoring 98   | HEADS
+INFO  [clean-score#4]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_VOID[R:-0.2] NOTEHEAD_BLACK[L:-0.2,R:0.2]}
+INFO  [clean-score#4]            StepMonitoring 98   | STEMS
+INFO  [clean-score#4]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#4]             ReductionStep 105  | Stems free length median value: 63 pixels, 3.3 interlines
+INFO  [clean-score#4]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#4]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#4]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#4]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#4]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#4]                      Page 307  | 13 raw measures: [2 in system#1, 2 in system#2, 3 in system#3, 3 in system#4, 3 in system#5]
+INFO  [clean-score#4]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#4]            StepMonitoring 98   | CURVES
+INFO  [clean-score#4]              SlursBuilder 240  | Slurs: 42
+INFO  [clean-score#4]           SegmentsBuilder 155  | Segments: 21
+INFO  [clean-score#4]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#4]            StepMonitoring 98   | LINKS
+INFO  [clean-score#4]                  KeyInter 1198 | No effective key before AlterInter#7651{(0.792) staff:1 NATURAL pitch:2.0}
+INFO  [clean-score#4]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#7726{(0.211) staff:6 OTTAVA BASSA} at java.awt.Point[x=273,y=2026]
+INFO  [clean-score#4]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#7848{(0.211) staff:7 OTTAVA ALTA} at java.awt.Point[x=273,y=2026]
+INFO  [clean-score#4]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#4]                PageRhythm 199  | {Page#4.1} Time value reused from sheet#1
+INFO  [clean-score#4]             MeasureRhythm 1276 | Measure{#4} Time inconsistency in {1/8=[HeadChordInter#6304{(0.937/0.937) staff:3 slot#3 off:1/8 dur:1/16}], 3/16=[HeadChordInter#6331{(0.945/0.945) staff:4 slot#3 off:3/16 dur:1/16}]}
+INFO  [clean-score#4]            StepMonitoring 98   | PAGE
+INFO  [clean-score#4]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#4]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#4]                DataHolder 348  | Stored /sheet#4/BINARY.png
+INFO  [clean-score#4]                     Sheet 1583 | Stored /sheet#4/sheet#4.xml
+INFO  [clean-score#4]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#4]                 SheetStub 1655 | Sheet#4 disposed
+INFO  [clean-score#4]                      Book 2050 | End of Stub#4
+INFO  [clean-score#5]            StepMonitoring 98   | LOAD
+INFO  [clean-score#5]                 SheetStub 1278 | Loaded image #5 2296x3251 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#5]            StepMonitoring 98   | BINARY
+INFO  [clean-score#5]            StepMonitoring 98   | SCALE
+INFO  [clean-score#5]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#5]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 949% of needed quorum
+INFO  [clean-score#5]              ScaleBuilder 401  | Normalized black jitter: 10.53 %
+INFO  [clean-score#5]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,1,3) beam(10)}
+INFO  [clean-score#5]            StepMonitoring 98   | GRID
+INFO  [clean-score#5]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#5]         ClustersRetriever 326  | Retrieved raw line clusters: 10 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#5]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9, 10]
+INFO  [clean-score#5]             SystemManager 800  | 1 part along 5 systems
+INFO  [clean-score#5]            StepMonitoring 98   | HEADERS
+INFO  [clean-score#5]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#5]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#5]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#5]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#5]            StepMonitoring 98   | HEADS
+INFO  [clean-score#5]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:-0.0,R:0.3]}
+INFO  [clean-score#5]            StepMonitoring 98   | STEMS
+INFO  [clean-score#5]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#5]             ReductionStep 105  | Stems free length median value: 56 pixels, 2.9 interlines
+INFO  [clean-score#5]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#5]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#5]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#5]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#5]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#5]                      Page 307  | 12 raw measures: [3 in system#1, 3 in system#2, 2 in system#3, 2 in system#4, 2 in system#5]
+INFO  [clean-score#5]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#5]            StepMonitoring 98   | CURVES
+INFO  [clean-score#5]              SlursBuilder 240  | Slurs: 39
+INFO  [clean-score#5]           SegmentsBuilder 155  | Segments: 19
+INFO  [clean-score#5]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#5]            StepMonitoring 98   | LINKS
+INFO  [clean-score#5]                  KeyInter 1198 | No effective key before AlterInter#9216{(0.798) staff:3 NATURAL pitch:-5.0}
+INFO  [clean-score#5]                  KeyInter 1198 | No effective key before AlterInter#9223{(0.794) staff:3 NATURAL pitch:2.0}
+INFO  [clean-score#5]                  KeyInter 1198 | No effective key before AlterInter#9264{(0.299) staff:5 NATURAL pitch:-1.0}
+INFO  [clean-score#5]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#5]                PageRhythm 199  | {Page#5.1} Time value reused from sheet#1
+INFO  [clean-score#5]             MeasureRhythm 1044 | Measure{#9} No timeOffset for HeadChordInter#7897{(0.944/0.944) staff:7 slot#8 dur:1/8}
+INFO  [clean-score#5]             MeasureRhythm 1044 | Measure{#9} No timeOffset for HeadChordInter#7917{(0.970/0.970) staff:8 slot#8 dur:1/16}
+INFO  [clean-score#5]        AbstractChordInter 635  | Measure{#9} No timeOffset for HeadChordInter#7898{(0.940/0.940) staff:7 slot#10 dur:1/8}
+INFO  [clean-score#5]        AbstractChordInter 635  | Measure{#9} No timeOffset for HeadChordInter#7920{(0.900/0.900) staff:8 slot#11 dur:1/16}
+INFO  [clean-score#5]               StackRhythm 224  | S4 MeasureStack#9 no correct rhythm
+INFO  [clean-score#5]             MeasureRhythm 1044 | Measure{#11} No timeOffset for HeadChordInter#7949{(0.956/0.956) staff:9 slot#14 dur:1/8}
+INFO  [clean-score#5]             MeasureRhythm 1044 | Measure{#11} No timeOffset for HeadChordInter#7973{(0.898/0.898) staff:10 slot#14 dur:1/16}
+INFO  [clean-score#5]        AbstractChordInter 635  | Measure{#11} No timeOffset for HeadChordInter#7951{(0.950/0.950) staff:9 slot#17 dur:1/16}
+INFO  [clean-score#5]        AbstractChordInter 635  | Measure{#11} No timeOffset for HeadChordInter#7976{(0.955/0.955) staff:10 slot#17 dur:1/16}
+INFO  [clean-score#5]                     Voice 257  | Measure{#11} Voice{#1 excess:1/4} too long
+INFO  [clean-score#5]                     Voice 257  | Measure{#11} Voice{#6 excess:1/4} too long
+INFO  [clean-score#5]               StackRhythm 224  | S5 MeasureStack#11 no correct rhythm
+INFO  [clean-score#5]            StepMonitoring 98   | PAGE
+INFO  [clean-score#5]            SheetReduction 154  | Gutter. Different glyphs 1/2 PedalInter#9093{(0.505/0.505) PEDAL_MARK} vs StemInter#5951{(0.790/0.991) staff:3 STEM}
+INFO  [clean-score#5]                     Voice 257  | Measure{#11} Voice{#1 excess:1/4} too long
+INFO  [clean-score#5]                     Voice 257  | Measure{#11} Voice{#6 excess:1/4} too long
+INFO  [clean-score#5]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#5]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#5]                DataHolder 348  | Stored /sheet#5/BINARY.png
+INFO  [clean-score#5]                     Sheet 1583 | Stored /sheet#5/sheet#5.xml
+INFO  [clean-score#5]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#5]                 SheetStub 1655 | Sheet#5 disposed
+INFO  [clean-score#5]                      Book 2050 | End of Stub#5
+INFO  [clean-score#6]            StepMonitoring 98   | LOAD
+INFO  [clean-score#6]                 SheetStub 1278 | Loaded image #6 2302x3251 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#6]            StepMonitoring 98   | BINARY
+INFO  [clean-score#6]            StepMonitoring 98   | SCALE
+INFO  [clean-score#6]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#6]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 992% of needed quorum
+INFO  [clean-score#6]              ScaleBuilder 401  | Normalized black jitter: 10.53 %
+INFO  [clean-score#6]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,1,3) beam(10)}
+INFO  [clean-score#6]            StepMonitoring 98   | GRID
+INFO  [clean-score#6]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#6]         ClustersRetriever 326  | Retrieved raw line clusters: 9 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#6]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5, 6] #4[7, 8] #5[9]
+INFO  [clean-score#6]             SystemManager 800  | 2 parts along 5 systems
+INFO  [clean-score#6]            StepMonitoring 98   | HEADERS
+WARN  [clean-score#6]               ClefBuilder 658  | Staff#6 no recognized header clef.
+INFO  [clean-score#6]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#6]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#6]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#6]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#6]            StepMonitoring 98   | HEADS
+INFO  [clean-score#6]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.2,R:0.4]}
+INFO  [clean-score#6]            StepMonitoring 98   | STEMS
+INFO  [clean-score#6]                BeamLinker 1729 | Not linking shorter BeamInter#1433{(0.696) BEAM}
+INFO  [clean-score#6]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#6]             ReductionStep 105  | Stems free length median value: 55 pixels, 2.9 interlines
+INFO  [clean-score#6]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#6]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#6]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#6]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#6]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#6]           MeasuresBuilder 416  | S3 partial barline column: s5:G(x:241,y:1544)[156]
+INFO  [clean-score#6]           MeasuresBuilder 428  | S3 deleting   half column: s5:G(x:241,y:1544)[156]
+INFO  [clean-score#6]           MeasuresBuilder 416  | S3 partial barline column: s6:G(x:1285,y:1803)[157]
+INFO  [clean-score#6]           MeasuresBuilder 428  | S3 deleting   half column: s6:G(x:1285,y:1803)[157]
+INFO  [clean-score#6]                      Page 307  | 11 raw measures: [3 in system#1, 3 in system#2, 2 in system#3, 2 in system#4, 1 in system#5]
+INFO  [clean-score#6]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#6]            StepMonitoring 98   | CURVES
+INFO  [clean-score#6]              SlursBuilder 240  | Slurs: 46
+INFO  [clean-score#6]           SegmentsBuilder 155  | Segments: 23
+INFO  [clean-score#6]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#6]            StepMonitoring 98   | LINKS
+INFO  [clean-score#6]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#8006{(0.617) staff:1 OTTAVA ALTA} at java.awt.Point[x=273,y=273]
+INFO  [clean-score#6]                  KeyInter 1198 | No effective key before AlterInter#8025{(0.791) staff:1 NATURAL pitch:2.0}
+INFO  [clean-score#6]                  KeyInter 1198 | No effective key before AlterInter#8171{(0.797) staff:9 NATURAL pitch:-5.0}
+INFO  [clean-score#6]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#6]                PageRhythm 199  | {Page#6.1} Time value reused from sheet#1
+INFO  [clean-score#6]             MeasureRhythm 1276 | Measure{#2} Time inconsistency in {1/8=[HeadChordInter#6728{(0.956/0.956) staff:2 slot#3 off:1/8 dur:1/8}], 1/4=[HeadChordInter#6698{(0.941/0.941) staff:1 slot#3 off:1/4 dur:1/8}]}
+INFO  [clean-score#6]             MeasureRhythm 1276 | Measure{#2} Time inconsistency in {1/2=[HeadChordInter#6731{(0.949/0.949) staff:2 slot#7 off:1/2 dur:1/8}], 5/8=[HeadChordInter#6701{(0.948/0.948) staff:1 slot#7 off:5/8 dur:1/4}]}
+INFO  [clean-score#6]             MeasureRhythm 1044 | Measure{#7P1} No timeOffset for HeadChordInter#6810{(0.952/0.952) staff:5 slot#12 dur:1/8}
+INFO  [clean-score#6]                     Voice 257  | Measure{#7P1} Voice{#1 excess:1/2} too long
+INFO  [clean-score#6]               StackRhythm 224  | S3 MeasureStack#7 no correct rhythm
+INFO  [clean-score#6]             MeasureRhythm 1276 | Measure{#9} Time inconsistency in {1/8=[HeadChordInter#6873{(0.895/0.895) staff:8 slot#3 off:1/8 dur:1/8}], 9/16=[HeadChordInter#6841{(0.905/0.905) staff:7 slot#3 off:9/16 dur:1/16}]}
+INFO  [clean-score#6]             MeasureRhythm 1044 | Measure{#11} No timeOffset for HeadChordInter#6897{(0.954/0.954) staff:9 slot#10 dur:1/8}
+INFO  [clean-score#6]        AbstractChordInter 635  | Measure{#11} No timeOffset for HeadChordInter#6897{(0.954/0.954) staff:9 slot#10 dur:1/8}
+INFO  [clean-score#6]        AbstractChordInter 635  | Measure{#11} No timeOffset for HeadChordInter#6901{(0.949/0.949) staff:9 slot#14 dur:3/8}
+INFO  [clean-score#6]        AbstractChordInter 635  | Measure{#11} No timeOffset for RestChordInter#8185{(0.752/0.752) staff:9 slot#15 dur:1/16}
+INFO  [clean-score#6]        AbstractChordInter 635  | Measure{#11} No timeOffset for HeadChordInter#6902{(0.884/0.884) staff:9 slot#16 dur:1/16}
+INFO  [clean-score#6]                     Voice 257  | Measure{#11} Voice{#1 excess:7/16} too long
+INFO  [clean-score#6]               StackRhythm 224  | S5 MeasureStack#11 no correct rhythm
+INFO  [clean-score#6]            StepMonitoring 98   | PAGE
+INFO  [clean-score#6]                     Voice 257  | Measure{#7P1} Voice{#1 excess:1/2} too long
+INFO  [clean-score#6]                     Voice 257  | Measure{#11} Voice{#1 excess:7/16} too long
+INFO  [clean-score#6]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#6]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#6]                DataHolder 348  | Stored /sheet#6/BINARY.png
+INFO  [clean-score#6]                     Sheet 1583 | Stored /sheet#6/sheet#6.xml
+INFO  [clean-score#6]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#6]                 SheetStub 1655 | Sheet#6 disposed
+INFO  [clean-score#6]                      Book 2050 | End of Stub#6
+INFO  [clean-score#7]            StepMonitoring 98   | LOAD
+INFO  [clean-score#7]                 SheetStub 1278 | Loaded image #7 2296x3248 from E:\Repositories\robianist\tmp\pdfs\clean-score.tif
+INFO  [clean-score#7]            StepMonitoring 98   | BINARY
+INFO  [clean-score#7]            StepMonitoring 98   | SCALE
+INFO  [clean-score#7]              ScaleBuilder 254  | Beam  guessed height: 11 -- 0.25 of [9..18] range
+INFO  [clean-score#7]              ScaleBuilder 271  | Beam measured height: 10 -- 0.11 of [9..18] range at 1032% of needed quorum
+INFO  [clean-score#7]              ScaleBuilder 401  | Normalized black jitter: 10.53 %
+INFO  [clean-score#7]                 ScaleStep 65   | Scale{ interline(18,19,20) line(1,1,3) beam(10)}
+INFO  [clean-score#7]            StepMonitoring 98   | GRID
+INFO  [clean-score#7]            LinesRetriever 1508 | Global slope: 0.00000
+INFO  [clean-score#7]         ClustersRetriever 326  | Retrieved raw line clusters: 9 of sizes [5] with interline(18,19,20)
+INFO  [clean-score#7]                 PeakGraph 310  | Systems: #1[1, 2] #2[3, 4] #3[5] #4[6] #5[7, 8] #6[9]
+INFO  [clean-score#7]             SystemManager 134  | Indentation detected for system #4
+INFO  [clean-score#7]             SystemManager 744  | 2 pages found in sheet
+INFO  [clean-score#7]             SystemManager 800  | Page #1: 1 part along 3 systems
+INFO  [clean-score#7]             SystemManager 800  | Page #2: 2 parts along 3 systems
+INFO  [clean-score#7]            StepMonitoring 98   | HEADERS
+WARN  [clean-score#7]               ClefBuilder 658  | Staff#7 no recognized header clef.
+INFO  [clean-score#7]            StepMonitoring 98   | STEM_SEEDS
+INFO  [clean-score#7]             StemSeedsStep 86   | stem(2 max:4)
+INFO  [clean-score#7]            StepMonitoring 98   | BEAMS
+INFO  [clean-score#7]            StepMonitoring 98   | LEDGERS
+INFO  [clean-score#7]            StepMonitoring 98   | HEADS
+INFO  [clean-score#7]             HeadSeedTally 235  | Scale information: HeadSeeds{NOTEHEAD_BLACK[L:0.2,R:0.3]}
+INFO  [clean-score#7]            StepMonitoring 98   | STEMS
+INFO  [clean-score#7]            StepMonitoring 98   | REDUCTION
+INFO  [clean-score#7]             ReductionStep 105  | Stems free length median value: 64 pixels, 3.4 interlines
+INFO  [clean-score#7]            StepMonitoring 98   | CUE_BEAMS
+INFO  [clean-score#7]              CueBeamsStep 81   | Step CUE_BEAMS is skipped because small heads switch is off
+INFO  [clean-score#7]            StepMonitoring 98   | TEXTS
+WARN  [clean-score#7]                 TextsStep 97   | TEXTS step: No OCR is available!
+INFO  [clean-score#7]            StepMonitoring 98   | MEASURES
+INFO  [clean-score#7]           MeasuresBuilder 416  | S5 partial barline column: s8:G(x:238,y:2388)[132]
+INFO  [clean-score#7]           MeasuresBuilder 428  | S5 deleting   half column: s8:G(x:238,y:2388)[132]
+INFO  [clean-score#7]           MeasuresBuilder 416  | S5 partial barline column: s7:G(x:723,y:2129)[131]
+INFO  [clean-score#7]           MeasuresBuilder 428  | S5 deleting   half column: s7:G(x:723,y:2129)[131]
+INFO  [clean-score#7]                      Page 307  | 5 raw measures: [2 in system#1, 2 in system#2, 1 in system#3]
+INFO  [clean-score#7]                      Page 307  | 5 raw measures: [1 in system#4, 3 in system#5, 1 in system#6]
+INFO  [clean-score#7]            StepMonitoring 98   | CHORDS
+INFO  [clean-score#7]            StepMonitoring 98   | CURVES
+INFO  [clean-score#7]              SlursBuilder 240  | Slurs: 30
+INFO  [clean-score#7]           SegmentsBuilder 155  | Segments: 14
+INFO  [clean-score#7]            StepMonitoring 98   | SYMBOLS
+INFO  [clean-score#7]            StepMonitoring 98   | LINKS
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6261{(0.604) staff:1 OTTAVA ALTA} at java.awt.Point[x=248,y=272]
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6264{(0.580) staff:2 OTTAVA BASSA} at java.awt.Point[x=248,y=858]
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6281{(0.580) staff:3 OTTAVA ALTA} at java.awt.Point[x=248,y=858]
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6282{(0.603) staff:4 OTTAVA BASSA} at java.awt.Point[x=248,y=1441]
+INFO  [clean-score#7]                  KeyInter 1198 | No effective key before AlterInter#6289{(0.238) staff:3 NATURAL pitch:-1.0}
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6308{(0.603) staff:5 OTTAVA ALTA} at java.awt.Point[x=248,y=1441]
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6339{(0.608) staff:7 OTTAVA} at java.awt.Point[x=248,y=2027]
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6341{(0.408) staff:8 OTTAVA BASSA} at java.awt.Point[x=270,y=2613]
+WARN  [clean-score#7]                  KeyInter 1174 | No effective clef before AlterInter#6352{(0.781) staff:7 NATURAL pitch:0.0}
+INFO  [clean-score#7]             SymbolsLinker 258  | No chord linked to OctaveShiftInter#6381{(0.408) staff:9 OTTAVA ALTA} at java.awt.Point[x=270,y=2613]
+INFO  [clean-score#7]            StepMonitoring 98   | RHYTHMS
+INFO  [clean-score#7]                PageRhythm 199  | {Page#7.1} Time value reused from sheet#1
+INFO  [clean-score#7]             MeasureRhythm 1044 | Measure{#5} No timeOffset for HeadChordInter#5256{(0.951/0.951) staff:5 slot#9 dur:1/16}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5257{(0.949/0.949) staff:5 slot#10 dur:1/16}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5260{(0.956/0.956) staff:5 slot#13 dur:1/16}
+INFO  [clean-score#7]             MeasureRhythm 1044 | Measure{#5} No timeOffset for HeadChordInter#5262{(0.952/0.952) staff:5 slot#14 dur:1/8}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5261{(0.846/0.846) staff:5 slot#14 dur:1/2}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5264{(0.943/0.943) staff:5 slot#16 dur:1/16}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5270{(0.949/0.949) staff:5 slot#22 dur:1/16}
+INFO  [clean-score#7]        AbstractChordInter 635  | Measure{#5} No timeOffset for HeadChordInter#5264{(0.943/0.943) staff:5 slot#16 dur:1/16}
+INFO  [clean-score#7]                     Voice 257  | Measure{#5} Voice{#1 excess:3/8} too long
+INFO  [clean-score#7]               StackRhythm 224  | S3 MeasureStack#5 no correct rhythm
+INFO  [clean-score#7]            StepMonitoring 98   | PAGE
+INFO  [clean-score#7]                     Voice 257  | Measure{#5} Voice{#1 excess:3/8} too long
+WARN  [clean-score#7]              MeasureFixer 343  | System#4 No target duration for measures local IDs [1], please check time signatures
+WARN  [clean-score#7]              MeasureFixer 343  | System#5 No target duration for measures local IDs [2, 3, 4], please check time signatures
+WARN  [clean-score#7]              MeasureFixer 343  | System#6 No target duration for measures local IDs [5], please check time signatures
+INFO  [clean-score#7]                      Book 2584 | Book{clean-score} storing
+INFO  [clean-score#7]                      Book 2565 | Stored /book.xml
+INFO  [clean-score#7]                DataHolder 348  | Stored /sheet#7/BINARY.png
+INFO  [clean-score#7]                     Sheet 1583 | Stored /sheet#7/sheet#7.xml
+INFO  [clean-score#7]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score#7]                 SheetStub 1655 | Sheet#7 disposed
+INFO  [clean-score#7]                      Book 2050 | End of Stub#7
+INFO  [clean-score]                      Book 2057 | End of Book{clean-score}
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#1/sheet#1.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#2/sheet#2.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#3/sheet#3.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#4/sheet#4.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#5/sheet#5.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#6/sheet#6.xml
+INFO  [clean-score]                 SheetStub 1000 | Loaded /sheet#7/sheet#7.xml
+INFO  [clean-score]                     Score 866  | PartCollation needed in {Score 2}
+INFO  [clean-score]                      Book 2109 | Scores built: 2
+INFO  [clean-score]           PartwiseBuilder 2707 | Exporting sheet(s): [#1#2#3#4#5#6#7]
+INFO  [clean-score]                      Part 351  | Sheet#1 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#1 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#1 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#1 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#1 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#1 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#1 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#1 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#2 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#2 System#3 Part#2{ staves[5] configs:[5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#2 System#4 Part#3{ staves[6,7] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#2 System#5 Part#3{ staves[8,9] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#2 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#2 System#4 Part#3{ staves[6,7] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#2 System#5 Part#3{ staves[8,9] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#2 System#1 Part#1{ staves[1] configs:[5]} dummyPart id: 3
+INFO  [clean-score]                      Part 351  | Sheet#2 System#3 Part#2{ staves[5] configs:[5]} dummyPart id: 3
+INFO  [clean-score]                      Part 351  | Sheet#3 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#3 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#3 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#3 System#4 Part#2{ staves[7] configs:[5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#3 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#3 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#3 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#3 System#4 Part#2{ staves[7] configs:[5]} dummyPart id: 3
+INFO  [clean-score]                      Part 351  | Sheet#4 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#4 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#4 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#4 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#4 System#5 Part#3{ staves[9,10] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#4 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#4 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#4 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#4 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#4 System#5 Part#3{ staves[9,10] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#5 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#5 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#5 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#5 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#5 System#5 Part#3{ staves[9,10] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#5 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#5 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#5 System#3 Part#3{ staves[5,6] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#5 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#5 System#5 Part#3{ staves[9,10] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#6 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#6 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#6 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#6 System#5 Part#2{ staves[9] configs:[5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#6 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#6 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#6 System#4 Part#3{ staves[7,8] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#6 System#3 Part#1{ staves[5] configs:[5]} dummyPart id: 3
+INFO  [clean-score]                      Part 351  | Sheet#6 System#5 Part#2{ staves[9] configs:[5]} dummyPart id: 3
+INFO  [clean-score]                      Part 351  | Sheet#7 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#7 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#7 System#3 Part#2{ staves[5] configs:[5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#7 System#1 Part#3{ staves[1,2] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#7 System#2 Part#3{ staves[3,4] configs:[5,5]} dummyPart id: 2
+INFO  [clean-score]                      Part 351  | Sheet#7 System#3 Part#2{ staves[5] configs:[5]} dummyPart id: 3
+INFO  [clean-score]             ScoreExporter 164  | Score clean-score.mvt1 exported to E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.mvt1.mxl
+INFO  [clean-score]           PartwiseBuilder 2707 | Exporting sheet(s): [#7]
+INFO  [clean-score]                      Part 351  | Sheet#7 System#4 Part#2{ staves[6] configs:[5]} dummyPart id: 1
+INFO  [clean-score]                      Part 351  | Sheet#7 System#6 Part#2{ staves[9] configs:[5]} dummyPart id: 1
+INFO  [clean-score]             ScoreExporter 164  | Score clean-score.mvt2 exported to E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.mvt2.mxl
+INFO  [clean-score]                      Book 2565 | Stored /book.xml
+INFO  [clean-score]                     Sheet 1583 | Stored /sheet#1/sheet#1.xml
+INFO  [clean-score]                     Sheet 1583 | Stored /sheet#7/sheet#7.xml
+INFO  [clean-score]                      Book 2525 | Book stored as E:\Repositories\robianist\tmp\pdfs\clean-recognized\clean-score.omr
+INFO  [clean-score]                     Score 181  | Closing {Score 1}
+INFO  [clean-score]                     Score 181  | Closing {Score 2}
