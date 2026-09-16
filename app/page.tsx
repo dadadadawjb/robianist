@@ -1,15 +1,18 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pause, Play, RotateCcw, Focus, Volume2, X, Maximize2, BookOpen, Upload, Download } from 'lucide-react';
+import { Pause, Play, RotateCcw, Video, Square, Focus, Eye, MoveLeft, UserRound, Orbit, Volume2, X, Maximize2, BookOpen, Upload, Download } from 'lucide-react';
 import type { Song } from '@/lib/music';
 import { builtinScores } from '@/lib/builtin-scores';
 import { readScore } from '@/lib/score';
 import { assignFingers } from '@/lib/fingering';
 import { hand } from '@/lib/presets';
 import { usePlayer } from '@/lib/player';
+import { cameraViews, type CameraView } from '@/lib/camera';
+import { useRecording } from '@/lib/use-recording';
 const Scene = dynamic(() => import('@/components/Scene'), { ssr:false, loading:()=><div className="scene-loading">Loading the stage…</div> });
 const SheetMusic = dynamic(() => import('@/components/SheetMusic'), { ssr:false });
+const viewIcons={overview:Maximize2,hands:Focus,side:MoveLeft,eyes:Eye,shoulder:UserRound,motion:Orbit};
 const stamp = (s:number) => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 async function loadPreset(id:string) {
   const preset=builtinScores.find(s=>s.id===id)!;
@@ -33,13 +36,24 @@ export default function Page() {
 function Performance({initialSong}:{initialSong:Song}) {
   const [song,setSong]=useState(initialSong);
   const [reset,setReset]=useState(0);
-  const [closeup,setCloseup]=useState(false);
+  const [view,setView]=useState<CameraView|null>('side');
+  const [controlsHidden,setControlsHidden]=useState(false);
   const [library,setLibrary]=useState<{id:string;title:string;difficulty?:string}[]>([...builtinScores]);
   const cache=useRef(new Map([[initialSong.id,initialSong]]));
   const [error,setError]=useState('');
   const [uploading,setUploading]=useState(false);
   const [panelOpen,setPanelOpen]=useState(false);
   const player=usePlayer(song);
+  const recording=useRecording(player,song);
+  useEffect(()=>{
+    let timer:ReturnType<typeof setTimeout>;
+    const wake=()=>{setControlsHidden(false);clearTimeout(timer);timer=setTimeout(()=>setControlsHidden(true),3000);};
+    wake();
+    const events=['pointermove','pointerdown','wheel','keydown'] as const;
+    events.forEach(event=>window.addEventListener(event,wake));
+    return ()=>{clearTimeout(timer);events.forEach(event=>window.removeEventListener(event,wake));};
+  },[]);
+  useEffect(()=>{if(recording.status==='recording')setControlsHidden(true);},[recording.status]);
   const plan=useMemo(()=>{
     try{return {notes:assignFingers(song.notes,hand.fingers),error:''};}
     catch(e){return {notes:[],error:e instanceof Error?e.message:'This hand cannot play the score.'};}
@@ -62,8 +76,8 @@ function Performance({initialSong}:{initialSong:Song}) {
     finally{setUploading(false);}
   }
   function download(){const url=URL.createObjectURL(new Blob([song.xml],{type:'application/vnd.recordare.musicxml+xml'}));const link=document.createElement('a');link.href=url;link.download=`${song.id}.musicxml`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-  return <main className="experience">
-    <div className="stage"><Scene plannedNotes={plan.notes} song={song} time={player.time} playing={player.playing} reset={reset} closeup={closeup}/></div>
+  return <main className={`experience ${controlsHidden?'controls-hidden':''}`}>
+    <div className="stage"><Scene plannedNotes={plan.notes} song={song} time={player.time} playing={player.playing} reset={reset} view={view} onManualView={()=>setView(null)}/></div>
     <header className="identity"><h1><img src={`${process.env.NEXT_PUBLIC_BASE_PATH??''}/logo.png`} alt="" width="46" height="46"/>Robianist<span>.</span></h1><p>A roboticist that happens to be a pianist.</p></header>
     <div className="hardware-badge">Unitree G1 <span>×</span> Wuji Hand</div>
     {panelOpen&&<aside className="glass setup-panel score-panel" aria-label="Sheet music">
@@ -72,15 +86,26 @@ function Performance({initialSong}:{initialSong:Song}) {
       <button className="download-button" onClick={download}><Download size={15}/>Download this score</button>
       <p className="upload-help">Approximate visual fingering; physical reach and collisions are not simulated.</p>
     </aside>}
-    <div className="glass view-controls"><button className="icon-button" aria-label="Reset view" title="Reset view" onClick={()=>{setCloseup(false);setReset(reset+1);}}><Maximize2 size={18}/></button><button className={`icon-button ${closeup?'active':''}`} aria-label={closeup?'Overview':'Hands close-up'} title={closeup?'Overview':'Hands close-up'} onClick={()=>setCloseup(!closeup)}><Focus size={19}/></button></div>
+    <div className="bottom-controls">
+    <div className="glass view-controls" role="group" aria-label="Camera views">
+      {(Object.keys(cameraViews) as CameraView[]).map(id=>{const Icon=viewIcons[id];return <button key={id} className={`icon-button ${view===id?'active':''}`} disabled={recording.busy} aria-label={cameraViews[id]} title={cameraViews[id]} aria-pressed={view===id} onClick={()=>{setView(id);setReset(value=>value+1);}}><Icon size={18}/></button>;})}
+    </div>
+    <div className="glass recording-controls">
+      <button disabled={uploading||!!plan.error||recording.status==='preparing'||recording.status==='saving'} onClick={()=>{if(recording.status==='recording')recording.stop();else {setControlsHidden(true);void recording.start();}}}>
+        {recording.status==='recording'?<Square size={16}/>:<Video size={17}/>}{recording.status==='recording'?'Stop & save':recording.status==='preparing'?'Choose this tab…':recording.status==='saving'?'Saving…':'Export video'}
+      </button>
+      {recording.download&&<a href={recording.download.url} download={recording.download.name} aria-label="Download last video" title="Download last video"><Download size={15}/></a>}
+      {recording.error&&<p className="score-error" role="alert">{recording.error}</p>}
+    </div>
     <section className="glass transport" aria-label="Playback controls">
-      <div className="track"><label htmlFor="song">Score</label><select id="song" value={song.id} disabled={uploading} onChange={e=>void chooseSong(e.target.value)}>{library.map(s=><option key={s.id} value={s.id}>{s.title}{s.difficulty?` — ${s.difficulty}`:''}</option>)}</select></div>
-      <label className="upload-button icon-button" title="Upload MusicXML or MXL (up to 5 MB)"><Upload size={18}/><input aria-label="Upload MusicXML" type="file" accept=".musicxml,.xml,.mxl" disabled={uploading} onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file);e.target.value='';}}/></label>
-      <div className="play-actions"><button className="icon-button" aria-label="Restart" title="Restart" onClick={()=>player.seek(0)}><RotateCcw size={18}/></button><button className="play-button" disabled={uploading||!!plan.error} aria-label={player.playing?'Pause':'Play'} onClick={()=>player.playing?player.pause():void player.play()}>{player.playing?<Pause size={21} fill="currentColor"/>:<Play size={21} fill="currentColor"/>}</button></div>
-      <div className="timeline"><span>{stamp(player.time)}</span><input aria-label="Playback position" type="range" min="0" max={song.duration} step="0.01" value={player.time} onChange={e=>player.seek(Number(e.target.value))} style={{'--progress':`${player.time/song.duration*100}%`} as React.CSSProperties}/><span>{stamp(song.duration)}</span></div>
-      <div className="volume"><Volume2 size={18}/><input aria-label="Volume" type="range" min="0" max="1" step=".01" value={player.volume} onChange={e=>player.setVolume(Number(e.target.value))}/></div>
+      <div className="track"><label htmlFor="song">Score</label><select id="song" value={song.id} disabled={uploading||recording.busy} onChange={e=>void chooseSong(e.target.value)}>{library.map(s=><option key={s.id} value={s.id}>{s.title}{s.difficulty?` — ${s.difficulty}`:''}</option>)}</select></div>
+      <label className="upload-button icon-button" title="Upload MusicXML or MXL (up to 5 MB)"><Upload size={18}/><input aria-label="Upload MusicXML" type="file" accept=".musicxml,.xml,.mxl" disabled={uploading||recording.busy} onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file);e.target.value='';}}/></label>
+      <div className="play-actions"><button className="icon-button" disabled={recording.busy} aria-label="Restart" title="Restart" onClick={()=>player.seek(0)}><RotateCcw size={18}/></button><button className="play-button" disabled={uploading||recording.busy||!!plan.error} aria-label={player.playing?'Pause':'Play'} onClick={()=>player.playing?player.pause():void player.play()}>{player.playing?<Pause size={21} fill="currentColor"/>:<Play size={21} fill="currentColor"/>}</button></div>
+      <div className="timeline"><span>{stamp(player.time)}</span><input disabled={recording.busy} aria-label="Playback position" type="range" min="0" max={song.duration} step="0.01" value={player.time} onChange={e=>player.seek(Number(e.target.value))} style={{'--progress':`${player.time/song.duration*100}%`} as React.CSSProperties}/><span>{stamp(song.duration)}</span></div>
+      <div className="volume"><Volume2 size={18}/><input disabled={recording.busy} aria-label="Volume" type="range" min="0" max="1" step=".01" value={player.volume} onChange={e=>player.setVolume(Number(e.target.value))}/></div>
       <button className={`icon-button ${panelOpen?'active':''}`} aria-label="Show sheet music" title="Show sheet music" onClick={()=>setPanelOpen(!panelOpen)}><BookOpen size={20}/></button>
       {(error||plan.error)&&<p className="score-error transport-error" role="alert">{error||plan.error}</p>}
     </section>
+    </div>
   </main>;
 }

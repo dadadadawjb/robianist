@@ -1,12 +1,12 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {keyboard,keyGeometry,keyContact} from '../lib/keyboard.ts';
-import {isBlack} from '../lib/music.ts';
+import {isBlack,keyPitch} from '../lib/music.ts';
 
 test('visible keys have metre-scale dimensions independent of piano shell scaling',()=>{
-  assert.equal(keyGeometry(60,false).length,.155);
-  assert.equal(keyGeometry(61,false).length,.095);
-  assert.ok(keyboard.whiteWidth<.0235);
+  assert.equal(keyGeometry(60,false).length,.18);
+  assert.equal(keyGeometry(61,false).length,.11);
+  assert.ok(keyboard.whiteWidth<keyPitch);
   assert.ok(keyboard.blackWidth<keyboard.whiteWidth);
 });
 test('fingertip targets lie on the rotated key top throughout a press',()=>{

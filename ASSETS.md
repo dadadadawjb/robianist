@@ -12,7 +12,7 @@ Meshes remain at the scale specified by the supplied URDF. Sitting and piano-pla
 
 ## Piano and bench
 
-Original procedural meshes, with no downloaded piano asset or Steinway logo. Overall piano proportions target approximately 1.56 m width and 2.74 m length, using the [Steinway Model D dimensions](https://www.steinway.com/spirio) as a size reference. This is not a dimensionally faithful D274 CAD reproduction. The keyboard uses 23.5 mm white-key spacing and a 0.729 m top surface. The authored bench is 0.62 × 0.34 × 0.442 m.
+Original procedural meshes, with no downloaded piano asset or Steinway logo. The piano is authored directly in metres at approximately 1.40 m width and 2.24 m length, with a connected keybed, rim, soundboard, frame, lid prop and raised pedal assembly. It is an illustrative grand piano, not a dimensionally faithful Steinway CAD reproduction. The keyboard uses 25 mm white-key spacing and a 0.729 m top surface. The authored bench is 0.62 × 0.34 × 0.442 m.
 
 ## Scores and sound
 
@@ -22,4 +22,4 @@ User-provided `HumanLight.mxl` and `IfOnly.mxl` are retained as preset scores. A
 
 Three.js / React Three Fiber / Drei supply rendering and CCD IK. urdf-loader loads articulated STL assets. Lucide supplies UI icons. Dependency versions and third-party notices remain in the installed packages and lockfile.
 
-Keyboard geometry is built directly in metres, independently of the illustrative piano shell: white keys are 155 × 22.9 mm and black keys 95 × 13.7 mm. Key animation and fingertip targets share the same pivot and depression transform. Sound and key presses are score-clock driven, not collision-triggered; an IK target does not prove actual contact. No physics engine is used.
+Keyboard geometry is built directly in metres, with a matching keybed and enclosing piano shell: white keys are 180 × 24.4 mm and black keys 110 × 14.5 mm. Key animation and fingertip targets share the same pivot and depression transform. Sound and key presses are score-clock driven, not collision-triggered; an IK target does not prove actual contact. No physics engine is used.

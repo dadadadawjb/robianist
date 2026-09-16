@@ -1,12 +1,14 @@
 'use client';
-import { Suspense, useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Suspense, useLayoutEffect, useRef, type ComponentRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
+import { cameraPose, type CameraView as View } from '@/lib/camera';
 import { ContactShadows, Environment, Lightformer, Html, OrbitControls } from '@react-three/drei';
 import type { Song } from '@/lib/music';
 import type { FingerNote } from '@/lib/fingering';
 import { Humanoid } from './RobotAsset';
 import GrandPiano from './GrandPiano';
-type Props={plannedNotes:FingerNote[];song:Song;time:number;playing:boolean;reset:number;closeup:boolean};
+type Props={plannedNotes:FingerNote[];song:Song;time:number;playing:boolean;reset:number;view:View|null;onManualView:()=>void};
 export default function Scene(props:Props) {
   return <Canvas shadows dpr={[1,1.75]} camera={{position:[5,4.4,6.3],fov:39}} gl={{antialias:true}}>
     <color attach="background" args={['#252527']}/><fog attach="fog" args={['#252527',18,40]}/>
@@ -23,12 +25,31 @@ export default function Scene(props:Props) {
     </group>
     <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.03,0]} receiveShadow><planeGeometry args={[200,200]}/><meshStandardMaterial color="#353537" roughness={.65}/></mesh>
     <ContactShadows position={[0,-.02,0]} opacity={.5} scale={16} blur={2.5} far={6} resolution={512}/>
-    <CameraView reset={props.reset} closeup={props.closeup}/>
+    <CameraView reset={props.reset} view={props.view} time={props.time} onManualView={props.onManualView}/>
   </Canvas>;
 }
-function CameraView({reset,closeup}:{reset:number;closeup:boolean}) {
+function CameraView({reset,view,time,onManualView}:{reset:number;view:View|null;time:number;onManualView:()=>void}) {
   const {camera,size}=useThree();
-  useEffect(()=>{const d=size.width/size.height<1?1.85:1;camera.position.set(...(closeup?[.1,1.9,1.5]:[3*d,2.6*d,3.4*d]) as [number,number,number]);camera.lookAt(0,.65,closeup?0:-.75);},[camera,reset,closeup,size.width,size.height]);
-  return <OrbitControls key={`${reset}-${closeup}`} makeDefault target={[0,.65,closeup?0:-.75]} minDistance={.7} maxDistance={8} maxPolarAngle={Math.PI*.48} enableDamping/>;
+  const controls=useRef<ComponentRef<typeof OrbitControls>>(null);
+  const activePreset=useRef(view),interacting=useRef(false),songTime=useRef(time);
+  songTime.current=time;
+  const portrait=size.width<size.height;
+  useLayoutEffect(()=>{
+    activePreset.current=view;
+    if(!view)return;
+    const pose=cameraPose(view,songTime.current,portrait);
+    camera.position.set(...pose.position);controls.current!.target.set(...pose.target);
+    if(camera instanceof THREE.PerspectiveCamera){camera.fov=pose.fov;camera.near=.025;camera.updateProjectionMatrix();}
+    controls.current!.update();
+  },[camera,reset,view,portrait]);
+  useFrame(()=>{
+    if(activePreset.current==='motion'&&!interacting.current){
+      const pose=cameraPose('motion',time,portrait);
+      camera.position.set(...pose.position);controls.current!.target.set(...pose.target);controls.current!.update();
+    }
+  });
+  return <OrbitControls ref={controls} makeDefault minDistance={.3} maxDistance={8} maxPolarAngle={Math.PI*.48} enableDamping={false}
+    onStart={()=>{interacting.current=true;}}
+    onChange={()=>{if(interacting.current&&activePreset.current){activePreset.current=null;onManualView();}}}
+    onEnd={()=>{interacting.current=false;}}/>;
 }
-

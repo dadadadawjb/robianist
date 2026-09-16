@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { readScore } from '../lib/score.ts';
 import { assignFingers } from '../lib/fingering.ts';
 test('concert pitch and semitone tuning',()=>{assert.equal(frequency(69),440);assert.equal(frequency(81),880);});
-test('88-key keyboard maps all notes monotonically',()=>{for(let m=22;m<=108;m++)assert.ok(keyX(m)>keyX(m-1));assert.equal(isBlack(61),true);assert.equal(keyX(60),-2.5*.0235);});
+test('88-key keyboard maps all notes monotonically',()=>{for(let m=22;m<=108;m++)assert.ok(keyX(m)>keyX(m-1));assert.equal(isBlack(61),true);assert.equal(keyX(60),-2.5*.025);});
 test('Human Light fits four and five fingers without overlapping assignments',()=>{
   const song=readScore(readFileSync(new URL('../public/scores/HumanLight.mxl',import.meta.url)),'HumanLight.mxl');
   for(const count of [4,5]) {
@@ -48,4 +48,4 @@ test('sustained releases free fingers without deleting new attacks',()=>{
   assert.ok(notes.every(n=>n.duration===(n.midi===74?1:2)));
 });
 
-test('keyboard white-key pitch is 23.5 mm and spans 1.222 m',()=>{assert.ok(Math.abs(keyX(23)-keyX(21)-.0235)<1e-12);assert.ok(Math.abs(keyX(108)-keyX(21)+.0235-1.222)<1e-12);});
+test('keyboard white-key pitch is 25 mm and spans 1.300 m',()=>{assert.ok(Math.abs(keyX(23)-keyX(21)-.025)<1e-12);assert.ok(Math.abs(keyX(108)-keyX(21)+.025-1.300)<1e-12);});

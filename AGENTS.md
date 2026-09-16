@@ -67,6 +67,8 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - Whenever the codes are modified, check whether README.md needs updates for user-facing setup.
 
 ## Code Structure
+- `lib/camera.ts`: camera presets, manual override and song-clock-driven motion.
+- `lib/use-recording.ts`, `lib/recording.ts`: local tab video recording and codec selection.
 - `lib/keyboard.ts`: metre-scale key geometry and shared animated contact targets.
 - `.github/workflows/`: GitHub Pages build and deployment automation.
 - `next.config.mjs`: static export and deployment base path.
@@ -85,6 +87,8 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `tests/`: asset reference, fingering, music event, keyboard mapping and IK checks.
 
 ## Important Files
+- `lib/camera.ts`, `tests/camera.test.ts`: six views and deterministic moving camera checks.
+- `lib/use-recording.ts`, `lib/recording.ts`, `tests/recording.test.ts`: recording lifecycle, audio capture and format checks.
 - `public/models/g1_wuji/g1_wuji.urdf`: active model with supplied palm mounting transforms.
 - `lib/keyboard.ts`, `tests/keyboard.test.ts`: visible key dimensions, travel and fingertip targets.
 - `.github/workflows/pages.yml`: test, export and publish on pushes to main.
@@ -92,9 +96,9 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `lib/asset-url.ts`: shared URDF and mesh URL adaptation.
 - `tests/asset-url.test.ts`: root and subpath model URL checks.
 - `app/page.tsx`: fixed configuration badge, score selection and playback controls.
-- `components/Scene.tsx`: metre-scale stage, piano bench with foot support and camera views.
+- `components/Scene.tsx`: metre-scale stage, piano bench with foot support and camera views with manual override.
 - `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
-- `components/GrandPiano.tsx`: 88 independent keys and a Steinway-style grand piano body.
+- `components/GrandPiano.tsx`: 88 independent keys, graduated longitudinal strings, connected frame and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: cached G1 + Wuji assembly, seated pose and arm/finger IK.
 - `lib/arm-ik.ts`: library-based IK for imported arm and hand chains.
 - `lib/music.ts`: normalized score types and keyboard mapping.
