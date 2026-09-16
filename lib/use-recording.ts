@@ -26,7 +26,7 @@ export function useRecording(player:ReturnType<typeof usePlayer>,song:Song) {
       display=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:30,displaySurface:'browser'},audio:false,preferCurrentTab:true,selfBrowserSurface:'include'} as DisplayMediaStreamOptions);
       if(!mounted.current){display.getTracks().forEach(track=>track.stop());return;}
       const video=display.getVideoTracks()[0];
-      if(video.getSettings().displaySurface&&video.getSettings().displaySurface!=='browser')throw new Error('Choose the Robianist browser tab to record this performance.');
+      if(video.getSettings().displaySurface&&video.getSettings().displaySurface!=='browser')throw new Error('Choose the Robianist.js browser tab to record this performance.');
       audio=await player.recordingAudio();
       if(!mounted.current){audio.disconnect();display.getTracks().forEach(track=>track.stop());return;}
       if(video.readyState==='ended')throw new Error('Screen sharing ended before recording started.');

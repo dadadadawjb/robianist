@@ -78,7 +78,7 @@ function Performance({initialSong}:{initialSong:Song}) {
   function download(){const url=URL.createObjectURL(new Blob([song.xml],{type:'application/vnd.recordare.musicxml+xml'}));const link=document.createElement('a');link.href=url;link.download=`${song.id}.musicxml`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   return <main className={`experience ${controlsHidden?'controls-hidden':''}`}>
     <div className="stage"><Scene plannedNotes={plan.notes} song={song} time={player.time} playing={player.playing} reset={reset} view={view} onManualView={()=>setView(null)}/></div>
-    <header className="identity"><h1><img src={`${process.env.NEXT_PUBLIC_BASE_PATH??''}/logo.png`} alt="" width="46" height="46"/>Robianist<span>.</span></h1><p>A roboticist that happens to be a pianist.</p></header>
+    <header className="identity"><h1><img src={`${process.env.NEXT_PUBLIC_BASE_PATH??''}/logo.png`} alt="" width="46" height="46"/>Robianist<span>.js</span></h1><p>A roboticist that happens to be a pianist, in your browser.</p></header>
     <div className="hardware-badge">Unitree G1 <span>×</span> Wuji Hand</div>
     {panelOpen&&<aside className="glass setup-panel score-panel" aria-label="Sheet music">
       <button className="icon-button sheet-close" aria-label="Close sheet music" onClick={()=>setPanelOpen(false)}><X size={19}/></button>

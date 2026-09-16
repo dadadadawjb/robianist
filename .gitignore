@@ -3,5 +3,9 @@ node_modules/
 .asset-work/
 .next/
 out/
+output/
+tmp/
+*.log
+*.omr
 *.tsbuildinfo
 next-env.d.ts

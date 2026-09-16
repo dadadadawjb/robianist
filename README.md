@@ -1,10 +1,10 @@
-# Robianist
+# Robianist.js
 
-*A roboticist that happens to be a pianist.*
+*A roboticist that happens to be a pianist, in your browser.*
 
 ## For users
 
-Robianist is a full-screen 3D performance by a seated **Unitree G1 (29 DOF) + Wuji Hand**. The hardware is fixed. Choose a score beside the bottom timeline, upload MusicXML/MXL, or open the sheet music panel. Drag to orbit, scroll to zoom, or select one of six cameras: overview, hands close-up, elevated side, robot eyes, over the shoulder, or a moving arc. The six icon buttons sit in two rows beside the transport; hover for names. Clicking a preset highlights its border and restores that view, even when already selected. Dragging, panning or zooming clears the selection and keeps a custom view, including stopping the moving arc. The default elevated side view looks from the left. The arc follows song time, including pause and seek. The bottom controls and cursor hide after three seconds without input, and immediately on video export. Move the pointer, tap, scroll or use the keyboard to show them again. The title and description can be selected and copied.
+Robianist.js is a full-screen 3D performance by a seated **Unitree G1 (29 DOF) + Wuji Hand**. The hardware is fixed. Choose a score beside the bottom timeline, upload MusicXML/MXL, or open the sheet music panel. Drag to orbit, scroll to zoom, or select one of six cameras: overview, hands close-up, elevated side, robot eyes, over the shoulder, or a moving arc. The six icon buttons sit in two rows beside the transport; hover for names. Clicking a preset highlights its border and restores that view, even when already selected. Dragging, panning or zooming clears the selection and keeps a custom view, including stopping the moving arc. The default elevated side view looks from the left. The arc follows song time, including pause and seek. The bottom controls and cursor hide after three seconds without input, and immediately on video export. Move the pointer, tap, scroll or use the keyboard to show them again. The title and description can be selected and copied.
 
 The presets are **Human Light** (Easy, default) and **If Only...** (Hard). Web Audio synthesizes individual notes in a bounded rolling window.
 
@@ -18,7 +18,7 @@ Sitting is a fixed joint pose, and arm/finger motion uses approximate position I
 
 ### Video export
 
-Choose the camera and open sheet music if wanted, then click **Export video** and select the **Robianist tab** in the browser picker. Recording restarts the selected score from the beginning and includes the visible title, sheet music and moving camera. The bottom controls and cursor hide on export; moving the pointer shows them again, including in the recording. Audio comes directly from the synthesizer at the selected volume; no microphone or tab-audio permission is needed. Keep this tab visible and the window at the desired size throughout recording. Switching away pauses playback and saves the partial recording.
+Choose the camera and open sheet music if wanted, then click **Export video** and select the **Robianist.js tab** in the browser picker. Recording restarts the selected score from the beginning and includes the visible title, sheet music and moving camera. The bottom controls and cursor hide on export; moving the pointer shows them again, including in the recording. Audio comes directly from the synthesizer at the selected volume; no microphone or tab-audio permission is needed. Keep this tab visible and the window at the desired size throughout recording. Switching away pauses playback and saves the partial recording.
 
 At the end the video downloads automatically; **Stop & save** saves a partial performance. A **Download last video** link remains available until the next recording or page reload. Score, timeline, volume and camera preset controls are locked during recording. The browser must support screen capture and MediaRecorder on HTTPS or localhost (desktop Chrome or Edge recommended). Select the current tab: the browser controls the picker, and the application cannot guarantee which tab you select. MP4 is used when its codec is supported, otherwise WebM. Files are created locally, with no server upload.
 
@@ -56,7 +56,7 @@ The production build exports a static site to `out/`. Serve that directory with 
 
 Push this repository to GitHub with `main` as the deployment branch. In **Settings > Pages > Build and deployment**, set **Source** to **GitHub Actions**. The **Deploy GitHub Pages** workflow tests, builds and publishes `out/` on every push to `main`; it can also be started manually from the **Actions** tab after Pages is enabled.
 
-The workflow reads the deployment base path from GitHub Pages, including repository subpaths such as `/robianist`. Model URDFs, meshes and textures use the same prefix. Local development defaults to the root path. If your default branch has another name, update `on.push.branches` in `.github/workflows/pages.yml`.
+The workflow reads the deployment base path from GitHub Pages, including repository subpaths such as `/robianist.js`. Model URDFs, meshes and textures use the same prefix. Local development defaults to the root path. If your default branch has another name, update `on.push.branches` in `.github/workflows/pages.yml`.
 
 After the workflow succeeds, open the site link in **Settings > Pages**. Ensure the files under `public/models/` are committed so they are included in the published site.
 
@@ -78,6 +78,16 @@ Models are included under `public/models/g1_wuji/`. Keep `g1_wuji.urdf` and its 
 - `lib/score.ts`: bounded MXL extraction, MusicXML parsing and note timing.
 - `components/SheetMusic.tsx`: engraving and audio-clock cursor.
 - `public/models/g1_wuji/g1_wuji.urdf`: user-supplied assembled model; `ASSETS.md`: provenance.
+
+### Repository layout
+
+- `app/`: Next.js routes, page metadata and global styling.
+- `components/`: 3D scene, robot, piano and sheet-music UI.
+- `lib/`: playback, score parsing, animation, recording and model helpers.
+- `public/`: static models, scores and branding assets published with the app.
+- `tests/`: Node test coverage for deterministic playback and geometry helpers.
+- `.github/workflows/`: GitHub Pages CI and deployment.
+- Generated recognition and other local scratch files belong in ignored `tmp/` or `output/` directories.
 
 To add a preset, place its MXL in `public/scores/` and add its metadata to `lib/builtin-scores.ts`. Presets and uploads use the same reader. The first preset is the default.
 

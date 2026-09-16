@@ -57,8 +57,7 @@ For multi-step tasks, state a brief plan:
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
 ## Project Overview
-This project is implementing a demo web page showing a robot playing a piano.
-Maybe use Next.js + React + Three.js / React Three Fiber.
+Robianist.js is a browser-based demo of a robot playing a piano, built with Next.js, React and React Three Fiber.
 
 ## Maintenance Rules
 - Keep authored UI, comments and documentation in English.
@@ -81,7 +80,8 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `lib/fingering.ts`: visual finger contacts with approximate substitutions and sustained early releases.
 - `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
 - `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
-- `output/musicxml/`: user-provided PDF recognition draft and outstanding correction notes.
+- `output/`: ignored local generated output; never commit it.
+- `tmp/`: ignored local scratch space for recognition tools and generated artifacts; never commit it.
 - `public/models/`: official source meshes, URDFs and license notices.
 - `public/models/g1_wuji/`: user-supplied assembled G1 + Wuji URDF and relative meshes.
 - `tests/`: asset reference, fingering, music event, keyboard mapping and IK checks.
@@ -107,13 +107,13 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `public/scores/HumanLight.mxl`, `public/scores/IfOnly.mxl`: original compressed preset scores.
 - `tests/score.test.ts`: compressed imports, shared timing and preset consistency.
 - `public/logo.png`, `app/icon.png`: generated robot-head and keyboard logo.
-- `output/musicxml/README.md`: incomplete If Only transcription status and review requirements.
 - `lib/fingering.ts`: pitch-ordered finger assignment, approximate substitutions and sustained early releases.
 - `lib/player.ts`: audio-clock playback, seeking and pause.
 - `lib/audio.ts`, `tests/audio.test.ts`: incremental per-note synthesis and opening/seek/cleanup regressions.
 - `lib/presets.ts`: fixed G1 + Wuji model and arm/finger joint descriptors.
 - `README.md`: setup, supported features and extension boundaries.
 - `ASSETS.md`: third-party sources, licenses and asset limitations.
+- `.gitignore`: local dependency, build, recognition and log artifact exclusions.
 
 ## Running
 - `npm install`, then `npm run dev`.

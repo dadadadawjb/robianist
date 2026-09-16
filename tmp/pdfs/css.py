@@ -1,3 +1,0 @@
-from pathlib import Path
-p=Path('app/globals.css');s=p.read_text();s=s.replace('.setup-panel>label','.settings-fields>label').replace('.setup-panel>select','.settings-fields>select');s=s.replace('.setup-panel .quality-toggle{display:flex;justify-content:space-between;align-items:center;margin:0;font-size:12px;letter-spacing:0;color:#c5c5c8}.quality-toggle input{accent-color:white;width:16px;height:16px;cursor:pointer}','');p.write_text(s)
-p=Path('app/page.tsx');s=p.read_text().replace("import { assetUrl } from '@/lib/asset-url';\n",'').replace("assetUrl('/logo.png')","`${process.env.NEXT_PUBLIC_BASE_PATH??''}/logo.png`");p.write_text(s)
