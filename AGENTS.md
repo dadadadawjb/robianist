@@ -67,33 +67,35 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - Whenever the codes are modified, check whether README.md needs updates for user-facing setup.
 
 ## Code Structure
+- `lib/keyboard.ts`: metre-scale key geometry and shared animated contact targets.
 - `.github/workflows/`: GitHub Pages build and deployment automation.
 - `next.config.mjs`: static export and deployment base path.
 - `lib/asset-url.ts`: model URL prefix for subpath hosting.
 - `app/`: Next.js page, root layout, global styles and generated robot-piano icon.
 - `components/`: scene, grand piano, official URDF assets and live sheet music.
-- `lib/`: song events, hardware preset types and Web Audio transport.
+- `lib/`: song events, fixed humanoid descriptors and Web Audio transport.
 - `lib/audio.ts`: bounded lookahead audio scheduling and voice cleanup.
 - `lib/arm-ik.ts`: arbitrary-axis URDF joint adapter for Three.js CCDIKSolver.
 - `lib/fingering.ts`: visual finger contacts with approximate substitutions and sustained early releases.
 - `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
 - `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
 - `output/musicxml/`: user-provided PDF recognition draft and outstanding correction notes.
-- `scripts/fetch-models.mjs`: pinned upstream visual model downloads.
 - `public/models/`: official source meshes, URDFs and license notices.
-- `scripts/prepare-franka.mjs`: derive the browser visual URDF from official xacro origins.
+- `public/models/g1_wuji/`: user-supplied assembled G1 + Wuji URDF and relative meshes.
 - `tests/`: asset reference, fingering, music event, keyboard mapping and IK checks.
 
 ## Important Files
+- `public/models/g1_wuji/g1_wuji.urdf`: active model with supplied palm mounting transforms.
+- `lib/keyboard.ts`, `tests/keyboard.test.ts`: visible key dimensions, travel and fingertip targets.
 - `.github/workflows/pages.yml`: test, export and publish on pushes to main.
 - `next.config.mjs`: static export configuration.
 - `lib/asset-url.ts`: shared URDF and mesh URL adaptation.
 - `tests/asset-url.test.ts`: root and subpath model URL checks.
-- `app/page.tsx`: configuration UI and playback controls.
-- `components/Scene.tsx`: note-driven animation, presets and camera views.
+- `app/page.tsx`: fixed configuration badge, score selection and playback controls.
+- `components/Scene.tsx`: metre-scale stage, piano bench with foot support and camera views.
 - `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
 - `components/GrandPiano.tsx`: 88 independent keys and a Steinway-style grand piano body.
-- `components/RobotAsset.tsx`: urdf-loader asset cache and articulated robot/hand rendering.
+- `components/RobotAsset.tsx`: cached G1 + Wuji assembly, seated pose and arm/finger IK.
 - `lib/arm-ik.ts`: library-based IK for imported arm and hand chains.
 - `lib/music.ts`: normalized score types and keyboard mapping.
 - `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
@@ -103,10 +105,9 @@ Maybe use Next.js + React + Three.js / React Three Fiber.
 - `public/logo.png`, `app/icon.png`: generated robot-head and keyboard logo.
 - `output/musicxml/README.md`: incomplete If Only transcription status and review requirements.
 - `lib/fingering.ts`: pitch-ordered finger assignment, approximate substitutions and sustained early releases.
-- `scripts/fetch-models.mjs`: pinned manufacturer and converted visual asset downloads.
 - `lib/player.ts`: audio-clock playback, seeking and pause.
 - `lib/audio.ts`, `tests/audio.test.ts`: incremental per-note synthesis and opening/seek/cleanup regressions.
-- `lib/presets.ts`: independent robot/hand configuration and left/right model descriptors.
+- `lib/presets.ts`: fixed G1 + Wuji model and arm/finger joint descriptors.
 - `README.md`: setup, supported features and extension boundaries.
 - `ASSETS.md`: third-party sources, licenses and asset limitations.
 

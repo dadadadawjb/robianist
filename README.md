@@ -4,15 +4,17 @@
 
 ## For users
 
-Robianist is a playful, full-screen 3D robot piano performance. Combine a pair of robot arms with dexterous hands, choose a score, and watch the fingers and 88 piano keys move with synthesized, per-note sound. Drag to orbit, scroll to zoom, or use the close-up camera. Play, pause, restart, seek, and adjust volume from the floating player.
+Robianist is a full-screen 3D performance by a seated **Unitree G1 (29 DOF) + Wuji Hand**. The hardware is fixed. Choose a score beside the bottom timeline, upload MusicXML/MXL, or open the sheet music panel. Drag to orbit, scroll to zoom, or use the hands close-up camera.
 
-Available arms: Franka Emika Panda, Universal Robots UR5e, Flexiv Rizon 4 / mirrored 4R, and KUKA LBR iiwa 7 R800. Available hands: LEAP Hand v1, Wonik Robotics Allegro Hand, Shadow Dexterous Hand, Sharpa Wave, and Wuji Hand. Every hand loads separate upstream left and right models. These are well-established models with accessible assets; this project does not claim a verified sales/popularity ranking. Tianji Marvin is listed as unavailable pending an accessible, redistributable model.
+The presets are **Human Light** (Easy, default) and **If Only...** (Hard). Web Audio synthesizes individual notes in a bounded rolling window.
 
-The two presets are **Human Light** (Easy, selected by default) and **If Only...** (Hard). Upload your own uncompressed MusicXML or compressed MXL, or open the Sheet music tab to follow the score. Audio is generated for individual note events with Web Audio oscillators, not a prerecorded song. Notes are scheduled in a short rolling window so long scores do not allocate thousands of voices when playback starts. The grand piano is an original Steinway-inspired approximation, not an official Steinway model or a Steinway sample library.
+### Scale and assembly
 
-Lightweight rendering lowers pixel density and removes expensive shadows and piano strings. It keeps the selected hardware's actual meshes and joint structure. Models load on demand and are cached during the session. This option does not reduce model download size and does not perform convex decomposition.
+One world unit is one metre. The app loads the user-provided assembled model at `public/models/g1_wuji/g1_wuji.urdf` directly, with its relative mesh paths, material colors, joint limits and left/right palm mounting transforms preserved. No additional adapter or hand mounting transform is inserted. G1's published standing height is approximately 1.32 m.
 
-This is entertainment, not a physics simulator. Position IK and heuristic fingering do not guarantee collision avoidance, mechanically feasible wrist orientation, or perfect contact for every hardware/score combination.
+The original procedural piano is resized to approximately 1.56 m wide and 2.74 m long, with 23.5 mm white-key spacing (1.222 m keyboard span), white key surfaces at 0.729 m, and a 0.62 × 0.34 m bench with a 0.442 m seat height and a raised foot support for G1. Its shape and internal details remain illustrative, not an exact Steinway CAD model. Earlier versions enlarged arms 2.4× and hands 3.2× and did not use real-world proportions.
+
+Sitting is a fixed joint pose, and arm/finger motion uses approximate position IK. Playing orientation is derived from the supplied hand geometry. The demo does not validate balance, collision avoidance, or reachability of every note; it is not a robot controller.
 
 ## Score formats
 
@@ -22,7 +24,7 @@ Scores must contain one piano part with up to two staves, pitches within A0–C8
 
 OpenSheetMusicDisplay renders the original notation; a separate parser builds the playback timeline. Playback uses synthesized notes rather than expressive piano samples; dynamics, pedal markings and other expressive notation are not fully reproduced. Multiple voices sharing a key are merged at a unison attack, and a later attack releases the earlier press of that key.
 
-Approximate fingering allows substitutions and early release of held keys while their original audio continues to sustain, so both presets can play on four- and five-finger hands. The displayed key presses follow these visual contacts. A new chord that needs more fingers than the selected hand has disables playback with an explanation; the score can still be viewed and downloaded. This is a visual approximation of sustained playing, not physically validated pedal or hand control.
+Approximate fingering allows substitutions and early release of held keys while their original audio continues to sustain, for the fixed five-finger hands. The displayed key presses follow these visual contacts. A new chord requiring more than five fingers per hand disables playback with an explanation; the score can still be viewed and downloaded. This is a visual approximation of sustained playing, not physically validated pedal or hand control.
 
 ## For developers
 
@@ -50,31 +52,25 @@ The workflow reads the deployment base path from GitHub Pages, including reposit
 
 After the workflow succeeds, open the site link in **Settings > Pages**. Ensure the files under `public/models/` are committed so they are included in the published site.
 
-Models are included under `public/models/`. To fetch the pinned upstream visual resources again (requires internet and GitHub API access):
-
-```sh
-node scripts/fetch-models.mjs
-```
-
-The downloader preserves upstream license notices and original URDFs as `.urdf.source`, removes collision elements from browser URDFs, and resolves mesh paths to local public URLs. Existing mesh files are reused. To update a model, change its pinned source commit and remove only the corresponding cached model directory before downloading again.
+Models are included under `public/models/g1_wuji/`. Keep `g1_wuji.urdf` and its `meshes/` directory together; the loader resolves mesh paths relative to the URDF, including on GitHub Pages. No download or assembly script is required.
 
 ### Architecture
 
 - `app/page.tsx`, `app/globals.css`: English floating controls and monochrome stage layout.
 - `components/Scene.tsx`: React Three Fiber scene, lighting and cameras.
 - `components/GrandPiano.tsx`: piano body and individually animated keys.
-- `components/RobotAsset.tsx`: urdf-loader plus Three.js GLTF/OBJ/MTL loaders; preserved upstream materials and paired hand rigs.
-- `lib/presets.ts`: independent arm/hand descriptors, model URLs, endpoints and initial arm poses.
+- `components/RobotAsset.tsx`: urdf-loader with STL meshes and one connected humanoid rig.
+- `lib/presets.ts`: fixed G1 + Wuji model URL and joint names.
 - `lib/arm-ik.ts`: URDF transforms and arbitrary joint axes adapted to Three.js CCDIKSolver.
 - `lib/fingering.ts`: pitch-ordered visual contacts, approximate substitutions and sustained early releases.
 - `lib/music.ts`: score types and keyboard mapping; `lib/player.ts`: shared audio-clock transport and polyphonic synthesis.
 - `lib/builtin-scores.ts`: ordered preset titles, difficulty and MXL paths.
 - `lib/score.ts`: bounded MXL extraction, MusicXML parsing and note timing.
 - `components/SheetMusic.tsx`: engraving and audio-clock cursor.
-- `scripts/fetch-models.mjs`: pinned asset acquisition; `ASSETS.md`: provenance.
-
-To add an arm, provide a local URDF, end link, joint names, scale and initial pose in `lib/presets.ts`. To add a hand, supply left/right URLs, palm link and anatomical fingertip order (thumb, index, middle, ring, little). URDFs may reference GLB, STL, DAE or OBJ visual meshes. Verify joint limits, tip contact and orientation visually before claiming support.
+- `public/models/g1_wuji/g1_wuji.urdf`: user-supplied assembled model; `ASSETS.md`: provenance.
 
 To add a preset, place its MXL in `public/scores/` and add its metadata to `lib/builtin-scores.ts`. Presets and uploads use the same reader. The first preset is the default.
 
 All authored UI text, code comments and documentation are English. Upstream asset notices are preserved verbatim. Future commits should include `Co-authored-by: Codex <codex@openai.com>`.
+
+Keyboard geometry is built directly in metres, independently of the illustrative piano shell: white keys are 155 × 22.9 mm and black keys 95 × 13.7 mm. Key animation and fingertip targets share the same pivot and depression transform. Sound and key presses are score-clock driven, not collision-triggered; an IK target does not prove actual contact. No physics engine is used.

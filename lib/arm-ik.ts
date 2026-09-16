@@ -10,6 +10,7 @@ export function createChainIK(model:URDFRobot,end:string,names:string[],initial:
   for(let node:THREE.Object3D|null=endpoint;node&&node!==model;node=node.parent)chain.unshift(node);
   const rig=new THREE.SkinnedMesh(),root=new THREE.Bone(),target=new THREE.Bone();
   const bones=[root,target];rig.add(root,target);let parent=root;
+  const liveOrigins:{bone:THREE.Bone;node:THREE.Object3D}[]=[];
   const motions:{name:string;bone:THREE.Bone}[]=[];
   const links:{index:number;rotationMin:THREE.Vector3;rotationMax:THREE.Vector3}[]=[];
   function add(bone:THREE.Bone,min?:number,max?:number) {
@@ -20,6 +21,7 @@ export function createChainIK(model:URDFRobot,end:string,names:string[],initial:
   for(const node of chain) {
     const origin=new THREE.Bone();origin.position.copy(node.position);origin.quaternion.copy(node.quaternion);add(origin);
     const name=Object.keys(model.joints).find(n=>model.joints[n]===node);
+    if(!name||!names.includes(name))liveOrigins.push({bone:origin,node});
     if(name&&names.includes(name)) {
       const joint=model.joints[name],basis=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1),joint.axis);
       const axis=new THREE.Bone();axis.quaternion.copy(basis);add(axis);
@@ -32,11 +34,13 @@ export function createChainIK(model:URDFRobot,end:string,names:string[],initial:
   rig.bind(new THREE.Skeleton(bones));rig.matrixAutoUpdate=false;
   const solver=new CCDIKSolver(rig,[{target:1,effector:bones.length-1,links:links.reverse(),iteration:12,maxAngle:.18}]);
   return {update(goal:THREE.Vector3){
+    liveOrigins.forEach(({bone,node})=>{
+      bone.position.copy(node.position);bone.quaternion.copy(node.quaternion);
+      const link=links.find(l=>bones[l.index]===bone)!;
+      link.rotationMin.set(bone.rotation.x,bone.rotation.y,bone.rotation.z);link.rotationMax.copy(link.rotationMin);
+    });
     model.updateWorldMatrix(true,true);rig.matrix.copy(model.matrixWorld);rig.updateMatrixWorld(true);
     target.position.copy(rig.worldToLocal(goal.clone()));rig.updateMatrixWorld(true);solver.update();
     motions.forEach(({name,bone})=>model.setJointValue(name,bone.rotation.z));
   }};
-}
-export function createArmIK(model:URDFRobot) {
-  return createChainIK(model,'panda_link8',Array.from({length:7},(_,i)=>`panda_joint${i+1}`),[0,-.45,0,-1.9,0,1.5,.7]);
 }

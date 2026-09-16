@@ -3,79 +3,75 @@ import { use, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import URDFLoader, { type URDFRobot } from 'urdf-loader';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { createChainIK } from '@/lib/arm-ik';
 import { assetUrl } from '@/lib/asset-url';
-import { isBlack,keyX } from '@/lib/music';
+import { keyX } from '@/lib/music';
+import { keyContact } from '@/lib/keyboard';
 import type { FingerNote } from '@/lib/fingering';
-import type { ArmRig,HandPreset,Side } from '@/lib/presets';
+import { armJoints, hand, robotUrl, type Side } from '@/lib/presets';
 const cache=new Map<string,Promise<URDFRobot>>();
 function load(url:string) {
   if(!cache.has(url))cache.set(url,new Promise((resolve,reject)=>{
     const manager=new THREE.LoadingManager(),loader=new URDFLoader(manager);loader.parseCollision=false;
     manager.setURLModifier(assetUrl);
-    const original=loader.defaultMeshLoader.bind(loader);
-    loader.loadMeshCb=(path,mgr,material,done)=>{
-      if(/\.glb$/i.test(path))new GLTFLoader(mgr).load(path,g=>done(g.scene),undefined,reject);
-      else if(/\.obj$/i.test(path))new MTLLoader(mgr).load(path.replace(/\.obj$/i,'.mtl'),materials=>{materials.preload();new OBJLoader(mgr).setMaterials(materials).load(path,obj=>done(obj),undefined,reject);},undefined,reject);
-      else original(path,mgr,material,done);
-    };
     let model:URDFRobot;manager.onLoad=()=>resolve(model);manager.onError=p=>reject(new Error(`Model resource failed: ${p}`));
     manager.itemStart(url);
-    fetch(assetUrl(url)).then(r=>{if(!r.ok)throw new Error(`Model ${r.status}: ${url}`);return r.text();}).then(xml=>{loader.workingPath=url.includes('/vendor/')?'':url.slice(0,url.lastIndexOf('/')+1);model=loader.parse(xml);manager.itemEnd(url);}).catch(reject);
+    fetch(assetUrl(url)).then(r=>{if(!r.ok)throw new Error(`Model ${r.status}: ${url}`);return r.text();}).then(xml=>{loader.workingPath=url.slice(0,url.lastIndexOf('/')+1);model=loader.parse(xml);manager.itemEnd(url);}).catch(reject);
   }));return cache.get(url)!;
 }
 function useModel(url:string) {
   const source=use(load(url));
   return useMemo(()=>{const model=source.clone() as URDFRobot;model.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;}});return model;},[source]);
 }
-export function ImportedArm({rig,base,target,scale}:{rig:ArmRig;base:THREE.Vector3;target:THREE.Vector3;scale:number}) {
-  const model=useModel(rig.url),ik=useMemo(()=>createChainIK(model,rig.tip,rig.joints,rig.seed),[model,rig]);
-  useFrame(()=>ik.update(target),-1);
-  return <group position={[base.x,.25,base.z]} rotation={[0,Math.PI/2,0]}><primitive object={model} rotation={[-Math.PI/2,0,0]} scale={scale}/></group>;
-}
-export function ImportedHand({preset,side,wrist,notes,time,playing}:{preset:HandPreset;side:Side;wrist:THREE.Vector3;notes:FingerNote[];time:number;playing:boolean}) {
-  const model=useModel(preset.url(side));
-  const data=useMemo(()=>{
-    model.position.set(0,0,0);model.quaternion.identity();model.scale.setScalar(1);
-    Object.values(model.joints).forEach(j=>j.setJointValue(0));
-    const tips=preset.tips(side).map(n=>model.links[n]);
-    const palm=model.links[preset.palm(side)];
-    if(!palm||tips.some(t=>!t))throw new Error(`Invalid hand rig: ${preset.name}`);
+export function Humanoid({notes,time,playing}:{notes:FingerNote[];time:number;playing:boolean}) {
+  const model=useModel(robotUrl);
+  const rigs=useMemo(()=>{
+    model.rotation.set(-Math.PI/2,0,Math.PI/2);
+    model.position.set(0,.59,.46);
+    for(const side of ['left','right'] as const){
+      model.setJointValue(`${side}_hip_pitch_joint`,-Math.PI/2);
+      model.setJointValue(`${side}_knee_joint`,Math.PI/2);
+    }
     model.updateMatrixWorld(true);
-    const points=tips.map(t=>t.getWorldPosition(new THREE.Vector3()));
-    const center=points.slice(1).reduce((a,b)=>a.add(b),new THREE.Vector3()).divideScalar(points.length-1);
-    const x=points.at(-1)!.clone().sub(points[1]).normalize().multiplyScalar(side==='right'?1:-1);
-    const z=center.clone().sub(palm.getWorldPosition(new THREE.Vector3())).negate();z.addScaledVector(x,-z.dot(x)).normalize();
-    const y=new THREE.Vector3().crossVectors(z,x).normalize();
-    const rotation=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(x,y,z)).invert();
-    model.quaternion.copy(rotation);model.scale.setScalar(preset.scale);model.updateMatrixWorld(true);
-    const offsets=tips.map(t=>t.getWorldPosition(new THREE.Vector3()));
-    const solvers=tips.map(t=>{
-      const names:string[]=[];
-      for(let n:THREE.Object3D|null=t;n&&n!==palm;n=n.parent){const name=Object.keys(model.joints).find(k=>model.joints[k]===n);if(name&&model.joints[name].jointType!=='fixed')names.unshift(name);}
-      return createChainIK(model,t.name,names);
-    });
-    return {tips,offsets,solvers,palm};
-  },[model,preset,side]);
+    return (['left','right'] as Side[]).map(side=>{
+      // Derive the playing orientation from this assembly's actual hand mounting.
+      const wrist=model.links[`${side}_wrist_yaw_link`];
+      const points=hand.tips(side).map(name=>wrist.worldToLocal(model.links[name].getWorldPosition(new THREE.Vector3())));
+      const palm=wrist.worldToLocal(model.links[`${side}_palm_link`].getWorldPosition(new THREE.Vector3()));
+      const across=points[4].clone().sub(points[1]).normalize().multiplyScalar(side==='right'?1:-1);
+      const back=palm.sub(points[2]);back.addScaledVector(across,-back.dot(across)).normalize();
+      const up=new THREE.Vector3().crossVectors(back,across).normalize();
+      const orientation=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(across,up,back)).invert();
+      return {orientation,
+      side,
+      target:new THREE.Vector3(side==='left'?-.16:.16,.76,-.06),
+      arm:createChainIK(model,`${side}_finger3_tip_link`,armJoints(side).slice(0,4),[-.3,side==='left'?.15:-.15,0,.8]),
+      fingers:hand.tips(side).map((tip,i)=>createChainIK(model,tip,[1,2,3,4].map(j=>`${side}_finger${i+1}_joint${j}`)))
+    };});
+  },[model]);
   useFrame((_,delta)=>{
-    const active=notes.filter(n=>time>=n.start&&time<n.start+n.duration);
-    const next=notes.find(n=>n.start>time),last=notes.filter(n=>n.start<=time).at(-1);
-    const anchors=active.length?active:[next??last??notes[0]].filter(Boolean);
-    if(!anchors.length)return;
-    const x=anchors.reduce((sum,n)=>sum+keyX(n.midi)-data.offsets[n.finger].x,0)/anchors.length;
-    const offsetY=data.offsets.slice(1).reduce((sum,p)=>sum+p.y,0)/(data.offsets.length-1);
-    const offsetZ=data.offsets.slice(1).reduce((sum,p)=>sum+p.z,0)/(data.offsets.length-1);
-    const desired=new THREE.Vector3(x,1.36-offsetY,-.26-offsetZ);
-    model.position.lerp(desired,1-Math.exp(-delta*22));model.updateWorldMatrix(true,true);
-    data.solvers.forEach((solver,i)=>{
-      const n=active.find(n=>n.finger===i);
-      const goal=n?new THREE.Vector3(keyX(n.midi),playing?(isBlack(n.midi)?1.34:1.235):1.40,isBlack(n.midi)?-.4:-.16):data.offsets[i].clone().add(model.position).add(new THREE.Vector3(0,.045,0));
-      solver.update(goal);
-    });
-    model.updateWorldMatrix(true,true);data.palm.getWorldPosition(wrist);
-  },-2);
+    for(const rig of rigs){
+      const own=notes.filter(n=>n.hand===rig.side);
+      const active=own.filter(n=>time>=n.start&&time<n.start+n.duration);
+      const anchor=active.length?active:[own.find(n=>n.start>time)??own.at(-1)].filter((n):n is FingerNote=>!!n);
+      if(!anchor.length)continue;
+      const x=anchor.reduce((sum,n)=>sum+keyX(n.midi),0)/anchor.length;
+      rig.target.lerp(new THREE.Vector3(x,.755,-.07),1-Math.exp(-delta*12));
+      // Keep the palms facing down while solving shoulder and elbow position.
+      for(let pass=0;pass<3;pass++){
+        const parent=model.joints[`${rig.side}_wrist_roll_joint`].parent!;
+        model.updateWorldMatrix(true,true);
+        const relative=parent.getWorldQuaternion(new THREE.Quaternion()).invert().multiply(rig.orientation);
+        const angles=new THREE.Euler().setFromQuaternion(relative,'XYZ');
+        ['roll','pitch','yaw'].forEach((axis,i)=>model.setJointValue(`${rig.side}_wrist_${axis}_joint`,[angles.x,angles.y,angles.z][i]));
+        rig.arm.update(rig.target);
+      }
+      model.updateWorldMatrix(true,true);
+      rig.fingers.forEach((solver,i)=>{
+        const n=active.find(n=>n.finger===i);
+        if(n){const goal=new THREE.Vector3(...keyContact(n.midi,playing));if(!playing)goal.y+=.025;solver.update(goal);}
+      });
+    }
+  });
   return <primitive object={model}/>;
 }
