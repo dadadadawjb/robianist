@@ -76,8 +76,11 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `components/`: scene, grand piano, official URDF assets and live sheet music.
 - `lib/`: song events, fixed humanoid descriptors and Web Audio transport.
 - `lib/audio.ts`: bounded lookahead audio scheduling and voice cleanup.
-- `lib/arm-ik.ts`: arbitrary-axis URDF joint adapter for Three.js CCDIKSolver.
-- `lib/fingering.ts`: visual finger contacts with approximate substitutions and sustained early releases.
+- `lib/arm-ik.ts`: joint-limited damped least-squares IK with wrist orientation and multiple contacts.
+- `lib/playing-pose.ts`: seated pose, finger-relative wrist targets, curved ready poses and idle-finger clearance.
+- `lib/pianoplayer.ts`: PianoPlayer motion cost, transition rules and memoized lookahead search.
+- `lib/fingering.ts`: optimized visual finger contacts with approximate substitutions and sustained early releases.
+- `public/licenses/pianoplayer.txt`: upstream source revision and MIT notice.
 - `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
 - `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
 - `output/`: ignored local generated output; never commit it.
@@ -100,17 +103,20 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
 - `components/GrandPiano.tsx`: 88 independent keys, graduated longitudinal strings, connected frame and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: cached G1 + Wuji assembly, seated pose and arm/finger IK.
-- `lib/arm-ik.ts`: library-based IK for imported arm and hand chains.
+- `lib/arm-ik.ts`, `lib/playing-pose.ts`: shared-arm contact solving and finger posture control.
+- `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: actual G1 + Wuji kinematics, opening playback, chord contacts, idle-finger clearance, wrist limits and pose reset checks.
 - `lib/music.ts`: normalized score types and keyboard mapping.
 - `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
 - `lib/builtin-scores.ts`: Human Light (default, Easy) and If Only... (Hard) metadata.
 - `public/scores/HumanLight.mxl`, `public/scores/IfOnly.mxl`: original compressed preset scores.
 - `tests/score.test.ts`: compressed imports, shared timing and preset consistency.
 - `public/logo.png`, `app/icon.png`: generated robot-head and keyboard logo.
-- `lib/fingering.ts`: pitch-ordered finger assignment, approximate substitutions and sustained early releases.
+- `lib/pianoplayer.ts`, `tests/pianoplayer.test.ts`, `tests/fixtures/pianoplayer.json`: TypeScript optimizer and Python reference regressions.
+- `lib/fingering.ts`, `tests/music.test.ts`: optimized finger assignment, approximate substitutions and sustained early releases.
+- `public/licenses/pianoplayer.txt`: PianoPlayer provenance and redistributed MIT license.
 - `lib/player.ts`: audio-clock playback, seeking and pause.
 - `lib/audio.ts`, `tests/audio.test.ts`: incremental per-note synthesis and opening/seek/cleanup regressions.
-- `lib/presets.ts`: fixed G1 + Wuji model and arm/finger joint descriptors.
+- `lib/presets.ts`: fixed G1 + Wuji model, arm/finger joint descriptors and shared seated depth.
 - `README.md`: setup, supported features and extension boundaries.
 - `ASSETS.md`: third-party sources, licenses and asset limitations.
 - `.gitignore`: local dependency, build, recognition and log artifact exclusions.

@@ -33,7 +33,7 @@ test('If Only plays with approximate contacts while preserving all audio notes',
   assert.deepEqual(song.notes,original);
 });
 test('substitution splits visual contact without retriggering the audio note',()=>{
-  const notes=[{midi:60,start:0,duration:2,hand:'right' as const},{midi:62,start:1,duration:.5,hand:'right' as const}];
+  const notes=[{midi:60,start:0,duration:2,hand:'right' as const},{midi:55,start:0,duration:.5,hand:'right' as const},{midi:62,start:1,duration:.5,hand:'right' as const}];
   const planned=assignFingers(notes,2);
   assert.ok(planned.some(n=>n.midi===60&&n.start===1));
   assert.equal(planned.filter(n=>n.midi===60).reduce((sum,n)=>sum+n.duration,0),2);

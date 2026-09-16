@@ -14,7 +14,7 @@ One world unit is one metre. The app loads the user-provided assembled model at 
 
 The procedural piano is built directly in metres, approximately 1.40 m wide and 2.24 m long, with 25 mm white-key spacing (1.30 m keyboard span), white key surfaces at 0.729 m, and a 0.62 × 0.34 m bench with a 0.442 m seat height and a raised foot support for G1. Its shape and internal details remain illustrative, not an exact Steinway CAD model. Earlier versions enlarged arms 2.4× and hands 3.2× and did not use real-world proportions.
 
-Sitting is a fixed joint pose, and arm/finger motion uses approximate position IK. Playing orientation is derived from the supplied hand geometry. The demo does not validate balance, collision avoidance, or reachability of every note; it is not a robot controller.
+Sitting is a fixed joint pose. The robot and bench sit 100 mm closer to the keyboard than the initial layout to improve low-bass reach. Arm/finger motion uses joint-limited damped least-squares IK: all seven arm joints solve wrist position and orientation together, with wrist targets derived from the assigned fingers' curved poses. Wide chords turn the hand within the keyboard plane and refine all active contacts together. Idle fingers return to a curved ready pose, then receive a separate lift after wrist solving, targeting 12 mm of pad clearance above unpressed black keys. Fingertip targets include a 7.5 mm approximate pad radius. Playing orientation is derived from the supplied hand geometry. The demo does not validate balance, collision avoidance, or reachability of every note; it is not a robot controller.
 
 ### Video export
 
@@ -32,7 +32,9 @@ Scores must contain one piano part with up to two staves, pitches within A0–C8
 
 OpenSheetMusicDisplay renders the original notation; a separate parser builds the playback timeline. Playback uses synthesized notes rather than expressive piano samples; dynamics, pedal markings and other expressive notation are not fully reproduced. Multiple voices sharing a key are merged at a unison attack, and a later attack releases the earlier press of that key.
 
-Approximate fingering allows substitutions and early release of held keys while their original audio continues to sustain, for the fixed five-finger hands. The displayed key presses follow these visual contacts. A new chord requiring more than five fingers per hand disables playback with an explanation; the score can still be viewed and downloaded. This is a visual approximation of sustained playing, not physically validated pedal or hand control.
+Fingering uses a browser-native TypeScript adaptation of [PianoPlayer](https://github.com/marcomusy/pianoplayer). It looks ahead up to nine notes per hand, minimizing weighted finger movement speed with black-key preferences, thumb-crossing rules and chord stretch limits. It uses upstream's medium human-hand geometry as a heuristic, not a calibrated Wuji hand model. No Python installation or service is needed.
+
+The integration keeps chords simultaneous and preserves held contacts where possible, allowing substitutions and early release while original audio continues to sustain. The displayed key presses follow these visual contacts. If human transition/stretch rules leave no solution, the planner penalizes those violations while still requiring unique, pitch-ordered simultaneous fingers. A new chord requiring more than five fingers per hand disables playback with an explanation; the score can still be viewed and downloaded. This remains a visual approximation, not physically validated pedal or hand control. Generated fingerings drive robot motion; they are not written into the displayed or downloaded score.
 
 ## For developers
 
@@ -71,8 +73,10 @@ Models are included under `public/models/g1_wuji/`. Keep `g1_wuji.urdf` and its 
 - `components/GrandPiano.tsx`: piano body and individually animated keys.
 - `components/RobotAsset.tsx`: urdf-loader with STL meshes and one connected humanoid rig.
 - `lib/presets.ts`: fixed G1 + Wuji model URL and joint names.
-- `lib/arm-ik.ts`: URDF transforms and arbitrary joint axes adapted to Three.js CCDIKSolver.
-- `lib/fingering.ts`: pitch-ordered visual contacts, approximate substitutions and sustained early releases.
+- `lib/arm-ik.ts`: joint-limited position/orientation IK and simultaneous finger contacts using world-space URDF axes.
+- `lib/playing-pose.ts`: finger-relative wrist placement, chord posture, fingertip clearance and ready poses.
+- `lib/pianoplayer.ts`: PianoPlayer motion cost, transition rules and memoized lookahead search; `public/licenses/pianoplayer.txt`: upstream MIT notice.
+- `lib/fingering.ts`: score-to-contact integration, approximate substitutions and sustained early releases.
 - `lib/music.ts`: score types and keyboard mapping; `lib/player.ts`: shared audio-clock transport and polyphonic synthesis.
 - `lib/builtin-scores.ts`: ordered preset titles, difficulty and MXL paths.
 - `lib/score.ts`: bounded MXL extraction, MusicXML parsing and note timing.

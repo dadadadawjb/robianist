@@ -1,0 +1,548 @@
+[
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0.0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 62,
+        "start": 0.25,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 64,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 65,
+        "start": 0.75,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 67,
+        "start": 1.0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 69,
+        "start": 1.25,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 71,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 72,
+        "start": 1.75,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      0,
+      1,
+      2,
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "velocity": 4.1761162646876935
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0.0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 62,
+        "start": 0.25,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 64,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 65,
+        "start": 0.75,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 67,
+        "start": 1.0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 69,
+        "start": 1.25,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 71,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 72,
+        "start": 1.75,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      4,
+      3,
+      2,
+      1,
+      0,
+      2,
+      1,
+      0
+    ],
+    "velocity": 4.092813852813853
+  },
+  {
+    "notes": [
+      {
+        "midi": 72,
+        "start": 0.0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 71,
+        "start": 0.25,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 69,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 67,
+        "start": 0.75,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 65,
+        "start": 1.0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 64,
+        "start": 1.25,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 62,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 60,
+        "start": 1.75,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      4,
+      3,
+      2,
+      1,
+      0,
+      2,
+      1,
+      0
+    ],
+    "velocity": 4.092813852813853
+  },
+  {
+    "notes": [
+      {
+        "midi": 72,
+        "start": 0.0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 71,
+        "start": 0.25,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 69,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 67,
+        "start": 0.75,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 65,
+        "start": 1.0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 64,
+        "start": 1.25,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 62,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 60,
+        "start": 1.75,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      0,
+      1,
+      2,
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "velocity": 4.1761162646876935
+  },
+  {
+    "notes": [
+      {
+        "midi": 61,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 63,
+        "start": 0.2,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 65,
+        "start": 0.4,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 66,
+        "start": 0.6,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 68,
+        "start": 0.8,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "velocity": 3.4024013949013954
+  },
+  {
+    "notes": [
+      {
+        "midi": 61,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 63,
+        "start": 0.2,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 65,
+        "start": 0.4,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 66,
+        "start": 0.6,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 68,
+        "start": 0.8,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "velocity": 4.593131313131311
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 67,
+        "start": 0.2,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 64,
+        "start": 0.8,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 72,
+        "start": 1,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 69,
+        "start": 2,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      0,
+      4,
+      0,
+      4,
+      2
+    ],
+    "velocity": 4.419633018496655
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 67,
+        "start": 0.2,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 64,
+        "start": 0.8,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 72,
+        "start": 1,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 69,
+        "start": 2,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      4,
+      0,
+      4,
+      0,
+      2
+    ],
+    "velocity": 4.427189098780007
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 64,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 67,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      0,
+      2,
+      4
+    ],
+    "velocity": 5.913636363636362
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 64,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 67,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      4,
+      2,
+      0
+    ],
+    "velocity": 5.218181818181816
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 60,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 62,
+        "start": 1,
+        "duration": 0.5,
+        "hand": "right"
+      },
+      {
+        "midi": 60,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "right"
+      }
+    ],
+    "fingers": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "velocity": 0.21636363636363684
+  },
+  {
+    "notes": [
+      {
+        "midi": 60,
+        "start": 0,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 60,
+        "start": 0.5,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 62,
+        "start": 1,
+        "duration": 0.5,
+        "hand": "left"
+      },
+      {
+        "midi": 60,
+        "start": 1.5,
+        "duration": 0.5,
+        "hand": "left"
+      }
+    ],
+    "fingers": [
+      2,
+      2,
+      1,
+      2
+    ],
+    "velocity": 0.21636363636363676
+  }
+]
