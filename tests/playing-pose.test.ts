@@ -12,6 +12,17 @@ import { armJoints,hand } from '../lib/presets.ts';
 
 const song=readScore(readFileSync(new URL('../public/scores/HumanLight.mxl',import.meta.url)),'HumanLight.mxl');
 const notes=assignFingers(song.notes,5);
+test('repeated key lifts the actual fingertip before pressing again',()=>{
+  const contacts=assignFingers([0,.5,1].map(start=>({midi:60,start,duration:.5,hand:'right' as const})),1);
+  const model=robotFixture(),pose=createPlayingPose(model),heights:number[]=[];
+  for(let frame=0;frame<=66;frame++) {
+    pose.update(contacts,frame/60,true,1/60);
+    heights.push(model.links.right_finger1_tip_link.getWorldPosition(new THREE.Vector3()).y);
+  }
+  assert.ok(heights[29]-heights[24]>.015,'Finger lifts between consecutive attacks');
+  assert.ok(Math.abs(heights[36]-playingContact(60,true).y)<.003,'Finger returns to the key');
+  assert.ok(heights[59]-heights[54]>.015,'The next repetition also lifts');
+});
 test('real G1 + Wuji reaches Human Light opening targets without overturning its wrists',()=>{
   const model=robotFixture(),pose=createPlayingPose(model);
   const orientations=new Map<string,THREE.Quaternion>();

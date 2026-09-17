@@ -5,6 +5,15 @@ import { readFileSync } from 'node:fs';
 import { readScore } from '../lib/score.ts';
 import { assignFingers } from '../lib/fingering.ts';
 test('concert pitch and semitone tuning',()=>{assert.equal(frequency(69),440);assert.equal(frequency(81),880);});
+test('repeated keys and reused fingers release before the next attack without changing audio',()=>{
+  for(const midi of [60,62])for(const interval of [.12,.5]) {
+    const source=[{midi:60,start:0,duration:interval,hand:'right' as const},{midi,start:interval,duration:interval,hand:'right' as const}];
+    const planned=assignFingers(source,1);
+    assert.ok(Math.abs(planned[0].duration-(interval-Math.min(.08,interval*.25)))<1e-9);
+    assert.equal(planned[1].start,interval);
+    assert.equal(source[0].duration,interval);
+  }
+});
 test('88-key keyboard maps all notes monotonically',()=>{for(let m=22;m<=108;m++)assert.ok(keyX(m)>keyX(m-1));assert.equal(isBlack(61),true);assert.equal(keyX(60),-2.5*.025);});
 test('Human Light fits four and five fingers without overlapping assignments',()=>{
   const song=readScore(readFileSync(new URL('../public/scores/HumanLight.mxl',import.meta.url)),'HumanLight.mxl');

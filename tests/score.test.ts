@@ -11,7 +11,10 @@ test('the two compressed presets load with complete timelines',()=>{
   for(const [i,preset] of builtinScores.entries()) {
     const song=readScore(readFileSync(new URL(`../public/scores/${preset.file}`,import.meta.url)),preset.file,preset.id);
     assert.equal(song.notes.length,[801,2039][i]);
-    assert.equal(song.duration,[142.8,282.8][i]);
+    assert.deepEqual(song.tempos,i===0?[{beat:0,bpm:80},{beat:136,bpm:78}]:[{beat:0,bpm:80}]);
+    // Human Light: 136 beats at 80 BPM, then 148 at 78; If Only: 376 at 80.
+    const expectedDuration=[136*60/80+148*60/78+.8,376*60/80+.8][i];
+    assert.ok(Math.abs(song.duration-expectedDuration)<1e-9,`${preset.title} duration: ${song.duration}`);
     assert.deepEqual(readScore(new TextEncoder().encode(song.xml),preset.id+'.musicxml').notes,song.notes);
   }
 });

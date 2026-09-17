@@ -34,5 +34,14 @@ export function assignFingers(notes:Note[],count:number):FingerNote[] {
       previous={...attacks[attacks.length-1],finger:fingers[fingers.length-1],chord:attacks.length>1};
     }
   }
-  return result.sort((a,b)=>a.start-b.start||a.midi-b.midi);
+  result.sort((a,b)=>a.start-b.start||a.midi-b.midi);
+  // Leave time to lift before reusing a finger or striking the same key again.
+  for(const n of result) {
+    const next=result.find(m=>m.hand===n.hand&&m.start>n.start&&(m.finger===n.finger||m.midi===n.midi));
+    if(!next||next.start>n.start+n.duration+.08)continue;
+    if(next.midi===n.midi&&!notes.some(m=>m.hand===next.hand&&m.midi===next.midi&&m.start===next.start))continue;
+    const gap=Math.min(.08,(next.start-n.start)*.25);
+    n.duration=Math.min(n.duration,next.start-n.start-gap);
+  }
+  return result;
 }

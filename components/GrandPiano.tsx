@@ -67,6 +67,7 @@ export default function GrandPiano({plannedNotes,time,playing}:{plannedNotes:Not
       <mesh position={[x,.315,z]} castShadow><cylinderGeometry args={[.045,.029,.52,8]}/><meshPhysicalMaterial color={ebony} clearcoat={1} roughness={.22}/></mesh>
       <mesh position={[x,.045,z]} rotation={[0,0,Math.PI/2]} castShadow><cylinderGeometry args={[.035,.035,.035,16]}/><meshStandardMaterial color={gold} metalness={.75} roughness={.28}/></mesh>
     </group>)}
+    <group position={[0,0,-.10]}>
     <Block at={[0,.555,-.29]} size={[.32,.04,.15]}/>
     {[-.105,.105].map(x=><Block key={x} at={[x,.36,-.29]} size={[.035,.38,.055]}/>)}
     <Block at={[0,.172,-.23]} size={[.29,.045,.17]}/>
@@ -74,6 +75,7 @@ export default function GrandPiano({plannedNotes,time,playing}:{plannedNotes:Not
       <Rod a={new THREE.Vector3(x,.19,-.25)} b={new THREE.Vector3(x,.56,-.25)} r={.004}/>
       <Block at={[x,.157,-.095]} size={[.042,.018,.19]} color={gold}/>
     </group>)}
+    </group>
     {Array.from({length:88},(_,i)=>i+21).map(midi=>{
       const black=isBlack(midi),active=playing&&plannedNotes.some(n=>n.midi===midi&&time>=n.start&&time<n.start+n.duration),key=keyGeometry(midi,active);
       return <group key={midi} position={[keyX(midi),keyboard.pivotY,keyboard.rearZ]} rotation={[key.angle,0,0]}><mesh position={[0,key.offsetY,key.length/2]} castShadow receiveShadow><boxGeometry args={[key.width,key.height,key.length]}/><meshStandardMaterial color={active?(black?'#333333':'#d6d6d6'):black?'#141414':'#f5f3ed'} roughness={.25}/></mesh></group>;

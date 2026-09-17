@@ -79,7 +79,7 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `lib/arm-ik.ts`: joint-limited damped least-squares IK with wrist orientation and multiple contacts.
 - `lib/playing-pose.ts`: seated pose, finger-relative wrist targets, curved ready poses and idle-finger clearance.
 - `lib/pianoplayer.ts`: PianoPlayer motion cost, transition rules and memoized lookahead search.
-- `lib/fingering.ts`: optimized visual finger contacts with approximate substitutions and sustained early releases.
+- `lib/fingering.ts`: optimized visual finger contacts with approximate substitutions, sustained early releases and pre-attack lift gaps.
 - `public/licenses/pianoplayer.txt`: upstream source revision and MIT notice.
 - `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
 - `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
@@ -104,7 +104,7 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `components/GrandPiano.tsx`: 88 independent keys, graduated longitudinal strings, connected frame and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: cached G1 + Wuji assembly, seated pose and arm/finger IK.
 - `lib/arm-ik.ts`, `lib/playing-pose.ts`: shared-arm contact solving and finger posture control.
-- `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: actual G1 + Wuji kinematics, opening playback, chord contacts, idle-finger clearance, wrist limits and pose reset checks.
+- `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: actual G1 + Wuji kinematics, opening playback, repeated-key lifts, chord contacts, idle-finger clearance, wrist limits and pose reset checks.
 - `lib/music.ts`: normalized score types and keyboard mapping.
 - `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
 - `lib/builtin-scores.ts`: Human Light (default, Easy) and If Only... (Hard) metadata.
