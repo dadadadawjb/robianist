@@ -9,6 +9,7 @@ import { createPoseIK } from '../lib/arm-ik.ts';
 import { assignFingers } from '../lib/fingering.ts';
 import { readScore } from '../lib/score.ts';
 import { armJoints,hand } from '../lib/presets.ts';
+import {pedalAmount,pedalContact,footSupport} from '../lib/pedal.ts';
 
 const song=readScore(readFileSync(new URL('../public/scores/HumanLight.mxl',import.meta.url)),'HumanLight.mxl');
 const notes=assignFingers(song.notes,5);
@@ -30,7 +31,7 @@ test('real G1 + Wuji reaches Human Light opening targets without overturning its
     for(let i=0;i<30;i++)pose.update(notes,time,true,1/60);
     for(const n of notes.filter(n=>n.start<=time&&time<n.start+n.duration)) {
       const tip=model.links[`${n.hand}_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3());
-      assert.ok(tip.distanceTo(playingContact(n.midi,true))<.003,`${time}s ${n.hand} finger ${n.finger+1} misses key`);
+      assert.ok(tip.distanceTo(playingContact(n.midi,true,n.finger))<.003,`${time}s ${n.hand} finger ${n.finger+1} misses key`);
     }
     for(const side of ['left','right'] as const) {
       const q=model.links[`${side}_wrist_yaw_link`].getWorldQuaternion(new THREE.Quaternion());
@@ -77,7 +78,7 @@ test('continuous opening playback settles onto keys after each attack',()=>{
     const time=frame/60;pose.update(notes,time,true,1/60);
     for(const n of notes.filter(n=>n.start+.12<time&&time<n.start+n.duration)) {
       const tip=model.links[`${n.hand}_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3());
-      assert.ok(tip.distanceTo(playingContact(n.midi,true))<.003,`${time}s ${n.hand} misses after transition`);
+      assert.ok(tip.distanceTo(playingContact(n.midi,true,n.finger))<.003,`${time}s ${n.hand} misses after transition`);
     }
   }
 });
@@ -90,7 +91,7 @@ test('white and black chords and low bass octaves share a reachable wrist pose',
       for(let frame=0;frame<30;frame++)pose.update(contacts,time,true,1/60);
       for(const n of contacts.filter(n=>n.start<=time&&time<n.start+n.duration)) {
         const tip=model.links[`${n.hand}_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3());
-        assert.ok(tip.distanceTo(playingContact(n.midi,true))<.005,`${file} ${time}s ${n.hand} finger ${n.finger+1}`);
+        assert.ok(tip.distanceTo(playingContact(n.midi,true,n.finger))<.005,`${file} ${time}s ${n.hand} finger ${n.finger+1}`);
       }
       for(const joint of Object.values(model.joints))if(joint.jointType==='revolute')assert.ok(joint.angle>=joint.limit.lower-1e-8&&joint.angle<=joint.limit.upper+1e-8);
     }
@@ -106,6 +107,90 @@ test('idle fingertips stay above adjacent black keys after the playing hand sett
       if(active.some(n=>n.hand===side&&n.finger===i))continue;
       const tip=model.links[name].getWorldPosition(new THREE.Vector3());
       assert.ok(tip.y-fingertipRadius>=keyContact(61,false)[1]+.01,`${time}s ${name} clearance too low: ${tip.y}`);
+    }
+  }
+});
+
+test('longer fingers land deeper while targets remain on the rotated key surface',()=>{
+  for(const midi of [60,61]){
+    const middle=playingContact(midi,true,2),thumb=playingContact(midi,true,0);
+    assert.ok(middle.z<thumb.z-(midi===60?.01:.004));
+    assert.ok(middle.y>thumb.y,'Deeper contact follows the tilted key top');
+  }
+});
+
+test('If Only bars 29 and 91 keep contacts and curved idle joints during continuous playback',()=>{
+  const score=readScore(readFileSync(new URL('../public/scores/IfOnly.mxl',import.meta.url)),'IfOnly.mxl');
+  const plan=assignFingers(score.notes,5);
+  // 4/4 at 80 BPM: bars 29 and 91 begin at 84 and 270 seconds.
+  for(const start of [83.8,269.8]){
+    const model=robotFixture(),pose=createPlayingPose(model);
+    for(let frame=0;frame<210;frame++){
+      const time=start+frame/60;pose.update(plan,time,true,1/60,score);
+      const active=plan.filter(n=>n.hand==='left'&&n.start<=time&&time<n.start+n.duration);
+      for(const n of active)if(time>=n.start+.05){
+        const tip=model.links[`left_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3());
+        assert.ok(tip.distanceTo(playingContact(n.midi,true,n.finger))<.005,`${time}: left key ${n.midi}`);
+      }
+      for(let finger=1;finger<5;finger++)if(!active.some(n=>n.finger===finger)){
+        for(const j of [3,4]){
+          const angle=model.joints[`left_finger${finger+1}_joint${j}`].angle;
+          assert.ok(angle>=.14&&angle<=.36,`${time}: idle finger ${finger}, joint ${j} folds or hyperextends`);
+        }
+      }
+    }
+  }
+});
+
+test('torso sway preserves hand contacts and the right foot follows the damper surface',()=>{
+  const score={...song,pedals:[{time:0,down:true},{time:1,down:false}]};
+  const model=robotFixture(),pose=createPlayingPose(model),rolls:number[]=[];
+  for(const time of [.2,.7,1.2]){
+    for(let frame=0;frame<15;frame++)pose.update(notes,time,true,1/60,score);
+    rolls.push(model.joints.waist_roll_joint.angle);
+    const toe=model.links.right_ankle_roll_link.localToWorld(new THREE.Vector3(.10,0,-.035));
+    assert.ok(toe.distanceTo(new THREE.Vector3(...pedalContact(pedalAmount(score.pedals,time))))<.003,`${time}: foot misses pedal`);
+    for(const n of notes.filter(n=>n.start<=time&&time<n.start+n.duration))assert.ok(model.links[`${n.hand}_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3()).distanceTo(playingContact(n.midi,true,n.finger))<.005);
+  }
+  assert.ok(Math.max(...rolls)-Math.min(...rolls)>.005);
+  pose.update(notes,1.2,false,1/60,score);
+  assert.equal(model.joints.waist_roll_joint.angle,0);
+});
+
+test('both heels stay supported while the right forefoot presses and releases the pedal',()=>{
+  const score={...song,pedals:[{time:0,down:true},{time:1,down:false}]};
+  const model=robotFixture(),pose=createPlayingPose(model);
+  assert.ok(footSupport.centerZ-footSupport.depth/2>-.10,'Platform clears the pedal front');
+  for(const time of [0,.03,.2,1.03,1.2]){
+    for(let frame=0;frame<15;frame++)pose.update(notes,time,true,1/60,score);
+    for(const side of ['left','right']){
+      const heel=model.links[`${side}_ankle_roll_link`].localToWorld(new THREE.Vector3(-.05,0,-.035));
+      assert.ok(Math.abs(heel.y-footSupport.top)<.002,`${side} heel floats at ${time}: ${heel.y}`);
+      assert.ok(Math.abs(heel.x)<footSupport.width/2-.01);
+      assert.ok(Math.abs(heel.z-footSupport.centerZ)<footSupport.depth/2-.01);
+    }
+    const toe=model.links.right_ankle_roll_link.localToWorld(new THREE.Vector3(.10,0,-.035));
+    assert.ok(toe.distanceTo(new THREE.Vector3(...pedalContact(pedalAmount(score.pedals,time))))<.003);
+  }
+});
+
+test('If Only bars 9–12 retain a lowered elbow when reached continuously from the opening',()=>{
+  const score=readScore(readFileSync(new URL('../public/scores/IfOnly.mxl',import.meta.url)),'IfOnly.mxl');
+  const plan=assignFingers(score.notes,5),model=robotFixture(),pose=createPlayingPose(model);
+  // Include the preceding wide chords: directly seeking to bar 9 misses the bad IK branch.
+  for(let frame=0;frame<36*60;frame++){
+    const time=frame/60;pose.update(plan,time,true,1/60,score);
+    if(time<24)continue;
+    for(const side of ['left','right'] as const){
+      const elbow=model.links[`${side}_elbow_link`].getWorldPosition(new THREE.Vector3());
+      const wrist=model.links[`${side}_wrist_yaw_link`].getWorldPosition(new THREE.Vector3());
+      assert.ok(elbow.y<wrist.y+.01,`${time}: ${side} elbow rises above wrist`);
+      const joint=model.joints[`${side}_elbow_joint`];
+      assert.ok(joint.angle<joint.limit.upper-.1,`${time}: ${side} elbow hits mechanical limit`);
+    }
+    for(const n of plan.filter(n=>n.start+.08<=time&&time<n.start+n.duration)){
+      const tip=model.links[`${n.hand}_finger${n.finger+1}_tip_link`].getWorldPosition(new THREE.Vector3());
+      assert.ok(tip.distanceTo(playingContact(n.midi,true,n.finger))<.005,`${time}: ${n.hand} misses ${n.midi}`);
     }
   }
 });

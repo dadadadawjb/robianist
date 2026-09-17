@@ -1,6 +1,7 @@
 import type { Tempo } from './score.ts';
-export type Note = { midi: number; start: number; duration: number; hand: 'left' | 'right' };
-export type Song = { id: string; title: string; subtitle: string; bpm: number; notes: Note[]; duration: number; xml: string; tempos: Tempo[] };
+export type Note = { midi: number; start: number; duration: number; hand: 'left' | 'right'; velocity?: number };
+export type PedalEvent = { time: number; down: boolean };
+export type Song = { id: string; title: string; subtitle: string; bpm: number; notes: Note[]; duration: number; xml: string; tempos: Tempo[]; pedals: PedalEvent[] };
 export const frequency = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
 export const noteName = (midi: number) => ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][midi % 12] + (Math.floor(midi / 12) - 1);
 export const isBlack = (midi: number) => [1,3,6,8,10].includes(midi % 12);

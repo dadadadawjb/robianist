@@ -18,18 +18,13 @@ export function usePlayer(song: Song) {
   function schedule(offset: number) {
     const ctx = context.current!; const origin = ctx.currentTime + .1;
     clock.current = { playing: true, offset, origin };
-    const next=createNoteScheduler(ctx,master.current!,song.notes,offset,origin);
+    const next=createNoteScheduler(ctx,master.current!,song.notes,offset,origin,song.pedals);
     scheduler.current=next;next.pump();timer.current=setInterval(next.pump,25);
     setPlaying(true);
   }
   async function prepareAudio() {
     if (!context.current) { context.current = new AudioContext(); master.current = context.current.createGain(); master.current.gain.value = volume; master.current.connect(context.current.destination); }
     await context.current.resume();
-  }
-  async function recordingAudio() {
-    await prepareAudio();
-    const output=context.current!.createMediaStreamDestination();master.current!.connect(output);
-    return {stream:output.stream,disconnect:()=>{master.current?.disconnect(output);output.stream.getTracks().forEach(track=>track.stop());}};
   }
   async function play() {
     await prepareAudio(); stopVoices(); schedule(clock.current.offset >= song.duration ? 0 : clock.current.offset);
@@ -41,5 +36,5 @@ export function usePlayer(song: Song) {
   useEffect(() => { let frame: number; const tick = () => { const c = clock.current; if(c.playing && context.current) { const t = Math.min(song.duration, c.offset + Math.max(0, context.current.currentTime - c.origin)); setTime(t); if(t >= song.duration) { c.playing = false; c.offset = t; setPlaying(false); stopVoices(); } } frame = requestAnimationFrame(tick); }; frame = requestAnimationFrame(tick); return () => cancelAnimationFrame(frame); }, [song]);
   useEffect(() => { const hide = () => { if(document.hidden) pause(); }; document.addEventListener('visibilitychange', hide); return () => document.removeEventListener('visibilitychange', hide); }, [song]);
   useEffect(() => () => { stopVoices();void context.current?.close();context.current=null; }, []);
-  return { time, playing, play, pause, seek, volume, setVolume, recordingAudio };
+  return { time, playing, play, pause, seek, volume, setVolume };
 }

@@ -58,3 +58,36 @@ test('unison voices share a key and reattacks release the earlier press',()=>{
   const score=parseScore(wrap(`<measure><attributes><divisions>4</divisions></attributes>${note('C','<voice>1</voice>',8)}<backup><duration>8</duration></backup>${note('C','<voice>2</voice>')}${note('C','<voice>2</voice>')}</measure>`));
   assert.deepEqual(score.notes.map(n=>[n.start,n.duration]),[[0,.6],[.6,.6]]);
 });
+
+test('arpeggios roll in both directions, share cross-staff numbering and keep their end times',()=>{
+  for(const direction of ['up','down']){
+    const mark=`<notations><arpeggiate number="1" direction="${direction}"/></notations>`;
+    const score=parseScore(wrap(`<measure><attributes><divisions>4</divisions></attributes>${note('C',mark+'<staff>2</staff>')}${note('E','<chord/>'+mark+'<staff>1</staff>')}${note('G','<chord/>'+mark+'<staff>1</staff>')}</measure>`));
+    assert.deepEqual(score.notes.map(n=>n.midi),direction==='up'?[60,64,67]:[67,64,60]);
+    assert.deepEqual(score.notes.map(n=>n.start),[0,.035,.07]);
+    assert.ok(score.notes.every(n=>Math.abs(n.start+n.duration-.6)<1e-9));
+  }
+});
+test('independent arpeggio numbers and unmarked chords do not roll together',()=>{
+  const mark=(number:number)=>`<notations><arpeggiate number="${number}"/></notations>`;
+  const score=parseScore(wrap(`<measure>${note('C',mark(1))}${note('E','<chord/>'+mark(1))}${note('G','<chord/>'+mark(2))}${note('B','<chord/>'+mark(2))}${note('D','<chord/>')}</measure>`));
+  assert.equal(score.notes.find(n=>n.midi===67)!.start,0);
+  assert.equal(score.notes.find(n=>n.midi===62)!.start,0);
+  assert.equal(score.notes.find(n=>n.midi===64)!.start,.035);
+  assert.equal(score.notes.find(n=>n.midi===71)!.start,.035);
+});
+test('dynamics respect staff, offsets, numeric sound values and note overrides',()=>{
+  const score=parseScore(wrap(`<measure><attributes><divisions>4</divisions></attributes><direction><direction-type><dynamics><pp/></dynamics></direction-type><staff>1</staff></direction>${note('C','<staff>1</staff>')}<direction><direction-type><dynamics><f/></dynamics></direction-type><staff>1</staff></direction>${note('D','<staff>1</staff>')}<backup><duration>8</duration></backup>${note('E','<staff>2</staff>')}<direction><offset>0</offset><staff>2</staff><sound dynamics="100"/></direction>${note('G','<staff>2</staff>')}<note dynamics="50"><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><staff>2</staff></note></measure>`));
+  assert.deepEqual([60,62,64,67,69].map(m=>score.notes.find(n=>n.midi===m)!.velocity),[38,92,76,90,45]);
+});
+test('pedal notation and sound events follow tempo changes and keep hand durations intact',()=>{
+  const score=parseScore(wrap(`<measure><attributes><divisions>4</divisions></attributes><direction><sound tempo="60"/></direction><direction><direction-type><pedal type="start"/></direction-type></direction>${note()}<direction><direction-type><pedal type="change"/></direction-type><sound tempo="120"/></direction>${note('E')}<direction><sound damper-pedal="no"/></direction></measure>`));
+  assert.deepEqual(score.pedals,[{time:0,down:true},{time:1,down:false},{time:1,down:true},{time:1.5,down:false}]);
+  assert.deepEqual(score.notes.map(n=>n.duration),[1,.5]);
+  const open=parseScore(wrap(`<measure><sound damper-pedal="yes"/>${note()}</measure>`));
+  assert.deepEqual(open.pedals,[{time:0,down:true},{time:2.4,down:false}]);
+});
+test('offset dynamics apply by musical time even when voices are serialized later',()=>{
+  const score=parseScore(wrap(`<measure><attributes><divisions>4</divisions></attributes><direction><direction-type><dynamics><p/></dynamics></direction-type></direction>${note('C')}${note('D')}<direction><direction-type><dynamics><ff/></dynamics></direction-type><offset>-4</offset><staff>1</staff></direction><backup><duration>8</duration></backup>${note('E','<staff>2</staff>')}${note('G','<staff>2</staff>')}</measure>`));
+  assert.deepEqual([60,62,64,67].map(m=>score.notes.find(n=>n.midi===m)!.velocity),[49,108,49,49]);
+});

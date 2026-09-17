@@ -1,6 +1,6 @@
 import { DOMParser, type Element } from '@xmldom/xmldom';
 import { unzipSync, strFromU8 } from 'fflate';
-import type { Note, Song } from './music.ts';
+import type { Note, Song, PedalEvent } from './music.ts';
 
 export function readScore(data:Uint8Array,filename:string,id='upload'):Song {
   if(data.byteLength>5_000_000)throw new Error('Please use a MusicXML file smaller than 5 MB.');
@@ -55,7 +55,10 @@ export function parseScore(xml:string,id='upload'):Song {
   if(parts.length!==1)throw new Error('Export a single piano part with right and left hand staves.');
   if(elements(root,'repeat').length||elements(root,'ending').length)throw new Error('Please unfold repeats before exporting the score.');
   if(elements(root,'transpose').length)throw new Error('Please export the piano score at concert pitch.');
-  const raw:(Note & {voice:string;grace?:boolean})[]=[];
+  const raw:(Note & {voice:string;grace?:boolean;arpeggio?:string;down?:boolean})[]=[];
+  const pedalBeats:{beat:number;down:boolean}[]=[];
+  const dynamics:{beat:number;staff:string;velocity:number}[]=[];
+  const levels:Record<string,number>={pppp:20,ppp:28,pp:38,p:49,mp:62,mf:76,f:92,ff:108,fff:120,ffff:127};
   const tempos:Tempo[]=[{beat:0,bpm:100}];
   const ties=new Map<string,Note>();
   let divisions=1,measureStart=0,measureBeats=4;
@@ -66,13 +69,35 @@ export function parseScore(xml:string,id='upload'):Song {
         if(value(child,'divisions'))divisions=Number(value(child,'divisions'));
         if(!(divisions>0))throw new Error('Invalid MusicXML divisions.');
         if(value(child,'beats'))measureBeats=Number(value(child,'beats'))*4/Number(value(child,'beat-type'));
-      } else if(child.tagName==='direction') {
-        for(const sound of elements(child,'sound')) {
+      } else if(child.tagName==='direction'||child.tagName==='sound') {
+        const beat=measureStart+cursor+Number(value(child,'offset')||0)/divisions;
+        if(!Number.isFinite(beat)||beat<0)throw new Error('Invalid expression timing.');
+        const staff=value(child,'staff');
+        const sounds=child.tagName==='sound'?[child]:elements(child,'sound');
+        const soundDynamics=sounds.find(s=>s.hasAttribute('dynamics'));
+        const mark=elements(child,'dynamics')[0];
+        const symbol=mark&&Array.from(mark.childNodes).find(n=>n.nodeType===1)?.nodeName;
+        const velocity=soundDynamics?Number(soundDynamics.getAttribute('dynamics'))*.9:symbol?levels[symbol]:undefined;
+        if(velocity!==undefined){
+          if(!Number.isFinite(velocity)||velocity<0)throw new Error('Invalid score dynamics.');
+          dynamics.push({beat,staff,velocity:Math.min(127,velocity)});
+        }
+        const soundPedal=sounds.find(s=>s.hasAttribute('damper-pedal'));
+        if(soundPedal){
+          const setting=soundPedal.getAttribute('damper-pedal')!;
+          if(setting!=='yes'&&setting!=='no'&&(!Number.isFinite(Number(setting))||Number(setting)<0||Number(setting)>100))throw new Error('Invalid damper pedal.');
+          pedalBeats.push({beat,down:setting==='yes'||Number(setting)>0});
+        } else for(const pedal of elements(child,'pedal')){
+          const type=pedal.getAttribute('type');
+          if(type==='stop'||type==='discontinue'||type==='change')pedalBeats.push({beat,down:false});
+          if(type==='start'||type==='resume'||type==='change')pedalBeats.push({beat,down:true});
+        }
+        for(const sound of sounds) {
           if(['dacapo','dalsegno','tocoda','fine'].some(a=>sound.hasAttribute(a)))throw new Error('Please unfold score navigation before exporting.');
           if(sound.hasAttribute('tempo')) {
             const bpm=Number(sound.getAttribute('tempo'));
             if(!Number.isFinite(bpm)||bpm<=0)throw new Error('Invalid score tempo.');
-            tempos.push({beat:measureStart+cursor+Number(value(child,'offset')||0)/divisions,bpm});
+            tempos.push({beat,bpm});
           }
         }
       } else if(child.tagName==='backup'||child.tagName==='forward') {
@@ -105,7 +130,10 @@ export function parseScore(xml:string,id='upload'):Song {
             if(!prior||Math.abs(prior.start+prior.duration-measureStart-start)>1e-5)throw new Error(`A tie does not connect matching consecutive notes in measure ${measure.getAttribute('number')} (${key}, beat ${measureStart+start}, previous end ${prior?prior.start+prior.duration:'missing'}).`);
             prior.duration+=duration;
           } else {
-            const note={midi,start:measureStart+start,duration,hand,voice,grace} as const;
+            const arpeggiate=elements(child,'arpeggiate')[0];
+            const velocity=child.hasAttribute('dynamics')?Number(child.getAttribute('dynamics'))*.9:undefined;
+            if(velocity!==undefined&&(!Number.isFinite(velocity)||velocity<0))throw new Error('Invalid note dynamics.');
+            const note={midi,start:measureStart+start,duration,hand,voice,grace,velocity:velocity===undefined?undefined:Math.min(127,velocity),arpeggio:arpeggiate?(arpeggiate.getAttribute('number')||'1'):undefined,down:arpeggiate?.getAttribute('direction')==='down'} as const;
             raw.push(note);
             if(types.includes('start'))ties.set(key,note);
           }
@@ -135,7 +163,21 @@ export function parseScore(xml:string,id='upload'):Song {
   if(!raw.length||raw.length>20000)throw new Error('The score must contain between 1 and 20,000 notes.');
   const ordered=tempos.sort((a,b)=>a.beat-b.beat).filter((t,i,a)=>a[i+1]?.beat!==t.beat);
   if(ordered.some(t=>t.beat<0)||!Number.isFinite(measureStart))throw new Error('Invalid score timing.');
-  const notes=raw.map(({midi,start,duration,hand})=>({midi,hand,start:secondsAt(start,ordered),duration:secondsAt(start+duration,ordered)-secondsAt(start,ordered)})).sort((a,b)=>a.start-b.start||a.midi-b.midi);
+  dynamics.sort((a,b)=>a.beat-b.beat);
+  const notes=raw.map(({midi,start,duration,hand,velocity})=>{
+    const staff=hand==='left'?'2':'1';
+    const dynamic=dynamics.findLast(d=>d.beat<=start&&(!d.staff||d.staff===staff));
+    return {midi,hand,start:secondsAt(start,ordered),duration:secondsAt(start+duration,ordered)-secondsAt(start,ordered),velocity:velocity??dynamic?.velocity??76};
+  });
+  const rolls=new Map<string,number[]>();
+  raw.forEach((n,i)=>{if(n.arpeggio){const key=`${n.start}:${n.arpeggio}`;const group=rolls.get(key)??[];group.push(i);rolls.set(key,group);}});
+  for(const group of rolls.values()){
+    const down=group.some(i=>raw[i].down);
+    group.sort((a,b)=>(notes[a].midi-notes[b].midi)*(down?-1:1));
+    const spread=Math.min(.12,.035*(group.length-1),Math.min(...group.map(i=>notes[i].duration))*.25);
+    group.forEach((index,i)=>{const delay=group.length>1?spread*i/(group.length-1):0;notes[index].start+=delay;notes[index].duration-=delay;});
+  }
+  notes.sort((a,b)=>a.start-b.start||a.midi-b.midi);
   // Multiple voices share physical keys: merge unisons and release before a reattack.
   const keys=new Map<string,Note>();
   const playable:Note[]=[];
@@ -145,5 +187,8 @@ export function parseScore(xml:string,id='upload'):Song {
     if(prior&&prior.start+prior.duration>note.start)prior.duration=note.start-prior.start;
     playable.push(note);keys.set(key,note);
   }
-  return {id,title:value(root,'work-title')||value(root,'movement-title')||'Uploaded piano score',subtitle:elements(root,'creator').find(c=>c.getAttribute('type')==='arranger')?.textContent||'MusicXML piano score',bpm:ordered[0].bpm,notes:playable,duration:secondsAt(measureStart,ordered)+.8,xml,tempos:ordered};
+  const end=secondsAt(measureStart,ordered);
+  const pedals:PedalEvent[]=pedalBeats.sort((a,b)=>a.beat-b.beat).map(p=>({time:secondsAt(p.beat,ordered),down:p.down}));
+  if(pedals.at(-1)?.down)pedals.push({time:Math.max(end,pedals.at(-1)!.time),down:false});
+  return {id,title:value(root,'work-title')||value(root,'movement-title')||'Uploaded piano score',subtitle:elements(root,'creator').find(c=>c.getAttribute('type')==='arranger')?.textContent||'MusicXML piano score',bpm:ordered[0].bpm,notes:playable,duration:Math.max(end,pedals.at(-1)?.time??0)+.8,xml,tempos:ordered,pedals};
 }

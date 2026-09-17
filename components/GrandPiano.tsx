@@ -2,8 +2,9 @@
 import { useEffect, useMemo } from 'react';
 import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
-import { isBlack, keyX, type Note } from '@/lib/music';
+import { isBlack, keyX, type Note, type Song } from '@/lib/music';
 import { keyboard,keyGeometry } from '@/lib/keyboard';
+import { pedalAmount,pedalGeometry } from '@/lib/pedal';
 
 const ebony='#171717',gold='#b49353';
 function Block({at,size,color=ebony}:{at:[number,number,number];size:[number,number,number];color?:string}) {return <RoundedBox args={size} position={at} radius={Math.min(.009,...size.map(n=>n/4))} smoothness={3} castShadow receiveShadow><meshPhysicalMaterial color={color} roughness={.28} metalness={.12} clearcoat={.8}/></RoundedBox>;}
@@ -20,7 +21,7 @@ function contour(inset=0) {
   s.bezierCurveTo(left,2.02-inset,left,1.85,left,1.65);s.closePath();return s;
 }
 function Slab({shape,y,depth,color}:{shape:THREE.Shape;y:number;depth:number;color:string}){return <mesh position={[0,y,0]} rotation={[-Math.PI/2,0,0]} castShadow receiveShadow><extrudeGeometry args={[shape,{depth,bevelEnabled:false,curveSegments:48}]}/><meshPhysicalMaterial color={color} roughness={color===ebony?.23:.48} metalness={color===gold?.5:.05} clearcoat={color===ebony?1:0}/></mesh>;}
-export default function GrandPiano({plannedNotes,time,playing}:{plannedNotes:Note[];time:number;playing:boolean}) {
+export default function GrandPiano({plannedNotes,time,playing,song}:{plannedNotes:Note[];time:number;playing:boolean;song:Song}) {
   const {outline,inner,rim}=useMemo(()=>{const outline=contour(),inner=contour(.045),rim=contour();rim.holes.push(new THREE.Path(inner.getPoints(48)));return {outline,inner,rim};},[]);
   const label=useMemo(()=>{const c=document.createElement('canvas');c.width=768;c.height=192;const ctx=c.getContext('2d')!;ctx.fillStyle='#c9a568';ctx.textAlign='center';ctx.font='38px Georgia';ctx.fillText('STEINWAY STYLE',384,85);ctx.font='20px Georgia';ctx.fillText('C O N C E R T   G R A N D',384,132);return new THREE.CanvasTexture(c);},[]);
   useEffect(()=>()=>label.dispose(),[label]);
@@ -73,7 +74,9 @@ export default function GrandPiano({plannedNotes,time,playing}:{plannedNotes:Not
     <Block at={[0,.172,-.23]} size={[.29,.045,.17]}/>
     {[-.085,0,.085].map(x=><group key={x}>
       <Rod a={new THREE.Vector3(x,.19,-.25)} b={new THREE.Vector3(x,.56,-.25)} r={.004}/>
-      <Block at={[x,.157,-.095]} size={[.042,.018,.19]} color={gold}/>
+      <group position={[x,pedalGeometry.pivotY,pedalGeometry.pivotZ+.10]} rotation={[x===pedalGeometry.x?pedalAmount(song.pedals,time)*pedalGeometry.travel:0,0,0]}>
+        <Block at={[0,0,pedalGeometry.length/2]} size={[.042,.018,pedalGeometry.length]} color={gold}/>
+      </group>
     </group>)}
     </group>
     {Array.from({length:88},(_,i)=>i+21).map(midi=>{

@@ -7,6 +7,7 @@ import { createPlayingPose } from '@/lib/playing-pose';
 import { assetUrl } from '@/lib/asset-url';
 import type { FingerNote } from '@/lib/fingering';
 import { robotUrl } from '@/lib/presets';
+import type { Song } from '@/lib/music';
 const cache=new Map<string,Promise<URDFRobot>>();
 function load(url:string) {
   if(!cache.has(url))cache.set(url,new Promise((resolve,reject)=>{
@@ -21,9 +22,9 @@ function useModel(url:string) {
   const source=use(load(url));
   return useMemo(()=>{const model=source.clone() as URDFRobot;model.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;}});return model;},[source]);
 }
-export function Humanoid({notes,time,playing}:{notes:FingerNote[];time:number;playing:boolean}) {
+export function Humanoid({notes,time,playing,song}:{notes:FingerNote[];time:number;playing:boolean;song:Song}) {
   const model=useModel(robotUrl);
   const pose=useMemo(()=>createPlayingPose(model),[model]);
-  useFrame((_,delta)=>pose.update(notes,time,playing,delta));
+  useFrame((_,delta)=>pose.update(notes,time,playing,delta,song));
   return <primitive object={model}/>;
 }

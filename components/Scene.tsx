@@ -7,6 +7,7 @@ import { ContactShadows, Environment, Lightformer, Html, OrbitControls } from '@
 import type { Song } from '@/lib/music';
 import type { FingerNote } from '@/lib/fingering';
 import { seatedDepth } from '@/lib/presets';
+import { footSupport } from '@/lib/pedal';
 import { Humanoid } from './RobotAsset';
 import GrandPiano from './GrandPiano';
 type Props={plannedNotes:FingerNote[];song:Song;time:number;playing:boolean;reset:number;view:View|null;onManualView:()=>void};
@@ -17,12 +18,14 @@ export default function Scene(props:Props) {
     <directionalLight position={[1,8,4]} intensity={3.2} castShadow shadow-mapSize={[2048,2048]} shadow-camera-left={-7} shadow-camera-right={7} shadow-camera-top={7} shadow-camera-bottom={-7} shadow-bias={-.0003}/>
     <Environment resolution={128}><Lightformer position={[0,6,0]} rotation={[Math.PI/2,0,0]} scale={[10,10,1]} intensity={2}/><Lightformer position={[-5,3,0]} rotation={[0,Math.PI/2,0]} scale={[10,3,1]} intensity={3}/></Environment>
     <GrandPiano {...props}/>
-    <Suspense fallback={<Html center><span className="asset-loading">Loading G1 + Wuji Hand…</span></Html>}><Humanoid notes={props.plannedNotes} time={props.time} playing={props.playing}/></Suspense>
+    <Suspense fallback={<Html center><span className="asset-loading">Loading G1 + Wuji Hand…</span></Html>}><Humanoid notes={props.plannedNotes} time={props.time} playing={props.playing} song={props.song}/></Suspense>
     <group position={[0,0,seatedDepth+.04]}>
       <mesh position={[0,.412,0]} castShadow receiveShadow><boxGeometry args={[.62,.06,.34]}/><meshStandardMaterial color="#191919" roughness={.8}/></mesh>
       {[-.25,.25].flatMap(x=>[-.11,.11].map(z=><mesh key={`${x}-${z}`} position={[x,.191,z]} castShadow><boxGeometry args={[.045,.382,.045]}/><meshStandardMaterial color="#161616" metalness={.3} roughness={.3}/></mesh>))}
-      <mesh position={[0,.114,-.415]} castShadow receiveShadow><boxGeometry args={[.4,.04,.24]}/><meshStandardMaterial color="#242424" roughness={.6}/></mesh>
-      {[-.16,.16].map(x=><mesh key={x} position={[x,.047,-.415]} castShadow><boxGeometry args={[.035,.094,.2]}/><meshStandardMaterial color="#171717"/></mesh>)}
+    </group>
+    <group position={[0,0,footSupport.centerZ]}>
+      <mesh position={[0,footSupport.top-.02,0]} castShadow receiveShadow><boxGeometry args={[footSupport.width,.04,footSupport.depth]}/><meshStandardMaterial color="#242424" roughness={.6}/></mesh>
+      {[-.16,.16].map(x=><mesh key={x} position={[x,.047,0]} castShadow><boxGeometry args={[.035,.094,.2]}/><meshStandardMaterial color="#171717"/></mesh>)}
     </group>
     <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.03,0]} receiveShadow><planeGeometry args={[200,200]}/><meshStandardMaterial color="#353537" roughness={.65}/></mesh>
     <ContactShadows position={[0,-.02,0]} opacity={.5} scale={16} blur={2.5} far={6} resolution={512}/>

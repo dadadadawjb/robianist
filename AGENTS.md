@@ -73,16 +73,15 @@ robianist.js/
 ├── lib/                         playback, animation, score parsing and robot kinematics
 │   ├── arm-ik.ts                joint-limited IK with wrist orientation and multiple contacts
 │   ├── asset-url.ts             model URL prefix for subpath hosting
-│   ├── audio.ts                 bounded-lookahead audio scheduling and voice cleanup
+│   ├── audio.ts                 dynamic synthesis, pedal sustain and bounded scheduling
 │   ├── builtin-scores.ts        ordered preset metadata and artist/arranger links
 │   ├── camera.ts                camera presets, manual override and song-clock motion
 │   ├── fingering.ts             visual finger assignment, substitutions and early releases
 │   ├── keyboard.ts              metre-scale key geometry and animated contact targets
 │   ├── pianoplayer.ts           motion cost, transition rules and memoized lookahead search
-│   ├── playing-pose.ts          seated pose, wrist targets, ready poses and idle clearance
-│   ├── recording.ts             video recording codec selection
-│   ├── score.ts                 MusicXML/MXL parsing and tempo mapping
-│   └── use-recording.ts         local tab video-recording lifecycle
+│   ├── pedal.ts                 damper timing, foot/pedal motion and shared geometry
+│   ├── playing-pose.ts          expressive seated pose, elbow-down selection and finger clearance
+│   └── score.ts                 MusicXML/MXL timing, arpeggios, dynamics and pedal events
 ├── public/
 │   ├── licenses/                third-party licenses and preset-score rights notice
 │   ├── models/g1_wuji/          user-supplied assembled G1 + Wuji URDF and meshes
@@ -97,23 +96,23 @@ robianist.js/
 
 ## Important Files
 - `lib/camera.ts`, `tests/camera.test.ts`: six views and deterministic moving camera checks.
-- `lib/use-recording.ts`, `lib/recording.ts`, `tests/recording.test.ts`: recording lifecycle, audio capture and format checks.
-- `lib/keyboard.ts`, `tests/keyboard.test.ts`: visible key dimensions, travel and fingertip targets.
+- `lib/pedal.ts`, `tests/pedal.test.ts`: damper release timing, full-width rearward foot support and shared foot/pedal animation geometry.
+- `lib/keyboard.ts`, `tests/keyboard.test.ts`: visible key dimensions, travel and depth-aware fingertip targets.
 - `app/page.tsx`: fixed configuration badge, score selection, expandable MusicXML help and playback controls.
 - `components/Scene.tsx`: metre-scale stage, piano bench with foot support and camera views with manual override.
 - `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
-- `components/GrandPiano.tsx`: 88 independent keys, graduated longitudinal strings, connected frame and a Steinway-style grand piano body.
+- `components/GrandPiano.tsx`: 88 independent keys, animated damper pedal, graduated strings and a Steinway-style grand piano body.
 - `components/RobotAsset.tsx`: cached G1 + Wuji assembly, seated pose and arm/finger IK.
-- `lib/arm-ik.ts`, `lib/playing-pose.ts`: shared-arm contact solving and finger posture control.
-- `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: actual G1 + Wuji kinematics, opening playback, repeated-key lifts, chord contacts, idle-finger clearance, wrist limits and pose reset checks.
+- `lib/arm-ik.ts`, `lib/playing-pose.ts`: shared-arm contact solving, mirrored seated arm seeds, elbow-down solution selection, curved idle fingers, anticipatory wrists, torso sway and right-foot pedal contact.
+- `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: real G1 + Wuji kinematics, continuous If Only bars 9–12 and 29/91, elbow posture, finger depths, foot/pedal alignment, sway, opening playback, key lifts and pose reset checks.
 - `lib/music.ts`: normalized score types and keyboard mapping.
-- `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
+- `lib/score.ts`: validated MusicXML/MXL imports, ties, grace timing, tempo conversion, arpeggios, staff dynamics and pedal events.
 - `lib/builtin-scores.ts`: preset scores' metadata with artist/arranger links.
 - `tests/score.test.ts`: compressed imports, shared timing and preset consistency.
 - `lib/pianoplayer.ts`, `tests/pianoplayer.test.ts`, `tests/fixtures/pianoplayer.json`: TypeScript optimizer and Python reference regressions.
 - `lib/fingering.ts`, `tests/music.test.ts`: optimized finger assignment, approximate substitutions and sustained early releases.
 - `lib/player.ts`: audio-clock playback, seeking and pause.
-- `lib/audio.ts`, `tests/audio.test.ts`: incremental per-note synthesis and opening/seek/cleanup regressions.
+- `lib/audio.ts`, `tests/audio.test.ts`: dynamic synthesis, pedal-held tails, repeated attacks and seek/cleanup regressions.
 - `lib/presets.ts`: fixed G1 + Wuji model, arm/finger joint descriptors and shared seated depth.
 
 ## Running
