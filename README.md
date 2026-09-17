@@ -6,7 +6,9 @@
 
 Robianist.js is a full-screen 3D performance by a seated **Unitree G1 (29 DOF) + Wuji Hand**. The hardware is fixed. Choose a score beside the bottom timeline, upload MusicXML/MXL, or open the sheet music panel. Drag to orbit, scroll to zoom, or select one of six cameras: overview, hands close-up, elevated side, robot eyes, over the shoulder, or a moving arc. The six icon buttons sit in two rows beside the transport; hover for names. Clicking a preset highlights its border and restores that view, even when already selected. Dragging, panning or zooming clears the selection and keeps a custom view, including stopping the moving arc. The default elevated side view looks from the left. The arc follows song time, including pause and seek. The bottom controls and cursor hide after three seconds without input, and immediately on video export. Move the pointer, tap, scroll or use the keyboard to show them again. The title and description can be selected and copied.
 
-The presets are **Human Light** (Easy, default) and **If Only...** (Hard). Web Audio synthesizes individual notes in a bounded rolling window.
+The presets are **Human Light** (default) and **If Only...**. Web Audio synthesizes individual notes in a bounded rolling window.
+
+The hardware names link to the manufacturers. Click **How?** below the upload icon for a MusicXML introduction and MuseScore audio, PDF and image conversion links. The sheet music panel uses a transparent background, light notation and a gray playback cursor, with linked artist and arranger credits for presets.
 
 ### Scale and assembly
 
@@ -34,7 +36,7 @@ OpenSheetMusicDisplay renders the original notation; a separate parser builds th
 
 Fingering uses a browser-native TypeScript adaptation of [PianoPlayer](https://github.com/marcomusy/pianoplayer). It looks ahead up to nine notes per hand, minimizing weighted finger movement speed with black-key preferences, thumb-crossing rules and chord stretch limits. It uses upstream's medium human-hand geometry as a heuristic, not a calibrated Wuji hand model. No Python installation or service is needed.
 
-The integration keeps chords simultaneous and preserves held contacts where possible, allowing substitutions and early release while original audio continues to sustain. Before a repeated key or reused finger attacks, visual contacts release up to 80 ms early (at most a quarter of the attack interval), allowing the fingers to lift while audio sustains. The displayed key presses follow these visual contacts. If human transition/stretch rules leave no solution, the planner penalizes those violations while still requiring unique, pitch-ordered simultaneous fingers. A new chord requiring more than five fingers per hand disables playback with an explanation; the score can still be viewed and downloaded. This remains a visual approximation, not physically validated pedal or hand control. Generated fingerings drive robot motion; they are not written into the displayed or downloaded score.
+The integration keeps chords simultaneous and preserves held contacts where possible, allowing substitutions and early release while original audio continues to sustain. Before a repeated key or reused finger attacks, visual contacts release up to 80 ms early (at most a quarter of the attack interval), allowing the fingers to lift while audio sustains. The displayed key presses follow these visual contacts. If human transition/stretch rules leave no solution, the planner penalizes those violations while still requiring unique, pitch-ordered simultaneous fingers. A new chord requiring more than five fingers per hand disables playback with an explanation; the score can still be viewed. This remains a visual approximation, not physically validated pedal or hand control. Generated fingerings drive robot motion; they are not written into the displayed score.
 
 ## For developers
 
@@ -78,7 +80,7 @@ Models are included under `public/models/g1_wuji/`. Keep `g1_wuji.urdf` and its 
 - `lib/pianoplayer.ts`: PianoPlayer motion cost, transition rules and memoized lookahead search; `public/licenses/pianoplayer.txt`: upstream MIT notice.
 - `lib/fingering.ts`: score-to-contact integration, approximate substitutions and sustained early releases.
 - `lib/music.ts`: score types and keyboard mapping; `lib/player.ts`: shared audio-clock transport and polyphonic synthesis.
-- `lib/builtin-scores.ts`: ordered preset titles, difficulty and MXL paths.
+- `lib/builtin-scores.ts`: ordered preset titles, artist/arranger credits and MXL paths.
 - `lib/score.ts`: bounded MXL extraction, MusicXML parsing and note timing.
 - `components/SheetMusic.tsx`: engraving and audio-clock cursor.
 - `public/models/g1_wuji/g1_wuji.urdf`: user-supplied assembled model; `ASSETS.md`: provenance.

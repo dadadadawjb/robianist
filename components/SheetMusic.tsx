@@ -3,8 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import type { OpenSheetMusicDisplay } from 'opensheetmusicdisplay';
 import type { Song } from '@/lib/music';
 import { beatAt } from '@/lib/score';
+import { builtinScores } from '@/lib/builtin-scores';
 
 export default function SheetMusic({song,time}:{song:Song;time:number}) {
+  const preset=builtinScores.find(p=>p.id===song.id);
   const host=useRef<HTMLDivElement>(null);
   const display=useRef<OpenSheetMusicDisplay|null>(null);
   const [ready,setReady]=useState(false);
@@ -19,7 +21,7 @@ export default function SheetMusic({song,time}:{song:Song;time:number}) {
     async function render() {
       const {OpenSheetMusicDisplay}=await import('opensheetmusicdisplay');
       if(cancelled)return;
-      const osmd=new OpenSheetMusicDisplay(node,{autoResize:false,backend:'svg',drawingParameters:'compacttight',drawTitle:false,drawComposer:false,followCursor:false});
+      const osmd=new OpenSheetMusicDisplay(node,{autoResize:false,backend:'svg',drawingParameters:'compacttight',drawTitle:false,drawComposer:false,followCursor:false,defaultColorMusic:'#dededf',pageBackgroundColor:'transparent',cursorsOptions:[{type:0,color:'#b1b1b5',alpha:.3,follow:false}]});
       await osmd.load(song.xml);
       if(cancelled)return;
       osmd.Zoom=.75;osmd.render();
@@ -46,5 +48,5 @@ export default function SheetMusic({song,time}:{song:Song;time:number}) {
       if(cursor.top<bounds.top||cursor.bottom>bounds.bottom)scroller.scrollTop+=cursor.top-bounds.top-40;
     }
   },[time,song,ready]);
-  return <><p className="score-caption">{song.title}</p><p className="upload-help">{song.subtitle}</p>{!ready&&!error&&<p role="status">Engraving sheet music…</p>}{error&&<p role="alert">{error}</p>}<div className="sheet-scroll"><div className="sheet-paper" ref={host}/></div></>;
+  return <><p className="score-caption">{song.title}</p>{preset&&<p className="score-credits">Artist: <a href={preset.artist.url} target="_blank" rel="noreferrer">{preset.artist.name}</a>; Arranger: <a href={preset.arranger.url} target="_blank" rel="noreferrer">{preset.arranger.name}</a></p>}{!ready&&!error&&<p role="status">Engraving sheet music…</p>}{error&&<p role="alert">{error}</p>}<div className="sheet-frame"><div className="sheet-scroll"><div className="sheet-paper" ref={host}/></div></div></>;
 }

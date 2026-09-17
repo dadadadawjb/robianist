@@ -81,7 +81,7 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `lib/pianoplayer.ts`: PianoPlayer motion cost, transition rules and memoized lookahead search.
 - `lib/fingering.ts`: optimized visual finger contacts with approximate substitutions, sustained early releases and pre-attack lift gaps.
 - `public/licenses/pianoplayer.txt`: upstream source revision and MIT notice.
-- `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata.
+- `lib/score.ts`, `lib/builtin-scores.ts`: MusicXML/MXL parsing, tempo mapping and ordered preset metadata and artist/arranger links.
 - `public/scores/`, `public/logo.png`: downloadable piano scores and robot-piano brand mark.
 - `output/`: ignored local generated output; never commit it.
 - `tmp/`: ignored local scratch space for recognition tools and generated artifacts; never commit it.
@@ -98,7 +98,7 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `next.config.mjs`: static export configuration.
 - `lib/asset-url.ts`: shared URDF and mesh URL adaptation.
 - `tests/asset-url.test.ts`: root and subpath model URL checks.
-- `app/page.tsx`: fixed configuration badge, score selection and playback controls.
+- `app/page.tsx`: fixed configuration badge, score selection, expandable MusicXML help and playback controls.
 - `components/Scene.tsx`: metre-scale stage, piano bench with foot support and camera views with manual override.
 - `components/SheetMusic.tsx`: OpenSheetMusicDisplay engraving and audio-clock cursor.
 - `components/GrandPiano.tsx`: 88 independent keys, graduated longitudinal strings, connected frame and a Steinway-style grand piano body.
@@ -107,7 +107,7 @@ Robianist.js is a browser-based demo of a robot playing a piano, built with Next
 - `tests/playing-pose.test.ts`, `tests/robot-fixture.ts`: actual G1 + Wuji kinematics, opening playback, repeated-key lifts, chord contacts, idle-finger clearance, wrist limits and pose reset checks.
 - `lib/music.ts`: normalized score types and keyboard mapping.
 - `lib/score.ts`: validated MusicXML/MXL piano imports, cross-voice ties, grace timing and tempo conversion.
-- `lib/builtin-scores.ts`: Human Light (default, Easy) and If Only... (Hard) metadata.
+- `lib/builtin-scores.ts`: Human Light (default) and If Only... metadata with artist/arranger links.
 - `public/scores/HumanLight.mxl`, `public/scores/IfOnly.mxl`: original compressed preset scores.
 - `tests/score.test.ts`: compressed imports, shared timing and preset consistency.
 - `public/logo.png`, `app/icon.png`: generated robot-head and keyboard logo.
