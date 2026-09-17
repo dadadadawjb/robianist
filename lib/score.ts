@@ -55,7 +55,13 @@ export function parseScore(xml:string,id='upload'):Song {
   if(parts.length!==1)throw new Error('Export a single piano part with right and left hand staves.');
   if(elements(root,'repeat').length||elements(root,'ending').length)throw new Error('Please unfold repeats before exporting the score.');
   if(elements(root,'transpose').length)throw new Error('Please export the piano score at concert pitch.');
-  const raw:(Note & {voice:string;grace?:boolean;arpeggio?:string;down?:boolean})[]=[];
+  const raw:(Note & {
+    voice:string;
+    grace?:boolean;
+    arpeggio?:string;
+    down?:boolean;
+    staccato?:boolean;
+  })[]=[];
   const pedalBeats:{beat:number;down:boolean}[]=[];
   const dynamics:{beat:number;staff:string;velocity:number}[]=[];
   const levels:Record<string,number>={pppp:20,ppp:28,pp:38,p:49,mp:62,mf:76,f:92,ff:108,fff:120,ffff:127};
@@ -131,9 +137,10 @@ export function parseScore(xml:string,id='upload'):Song {
             prior.duration+=duration;
           } else {
             const arpeggiate=elements(child,'arpeggiate')[0];
+            const staccato=elements(child,'staccato').length>0;
             const velocity=child.hasAttribute('dynamics')?Number(child.getAttribute('dynamics'))*.9:undefined;
             if(velocity!==undefined&&(!Number.isFinite(velocity)||velocity<0))throw new Error('Invalid note dynamics.');
-            const note={midi,start:measureStart+start,duration,hand,voice,grace,velocity:velocity===undefined?undefined:Math.min(127,velocity),arpeggio:arpeggiate?(arpeggiate.getAttribute('number')||'1'):undefined,down:arpeggiate?.getAttribute('direction')==='down'} as const;
+            const note={midi,start:measureStart+start,duration,hand,voice,grace,velocity:velocity===undefined?undefined:Math.min(127,velocity),arpeggio:arpeggiate?(arpeggiate.getAttribute('number')||'1'):undefined,down:arpeggiate?.getAttribute('direction')==='down',staccato} as const;
             raw.push(note);
             if(types.includes('start'))ties.set(key,note);
           }
@@ -164,10 +171,12 @@ export function parseScore(xml:string,id='upload'):Song {
   const ordered=tempos.sort((a,b)=>a.beat-b.beat).filter((t,i,a)=>a[i+1]?.beat!==t.beat);
   if(ordered.some(t=>t.beat<0)||!Number.isFinite(measureStart))throw new Error('Invalid score timing.');
   dynamics.sort((a,b)=>a.beat-b.beat);
-  const notes=raw.map(({midi,start,duration,hand,velocity})=>{
+  const notes=raw.map(({midi,start,duration,hand,velocity,staccato})=>{
     const staff=hand==='left'?'2':'1';
     const dynamic=dynamics.findLast(d=>d.beat<=start&&(!d.staff||d.staff===staff));
-    return {midi,hand,start:secondsAt(start,ordered),duration:secondsAt(start+duration,ordered)-secondsAt(start,ordered),velocity:velocity??dynamic?.velocity??76};
+    const startSeconds=secondsAt(start,ordered);
+    const fullDuration=secondsAt(start+duration,ordered)-startSeconds;
+    return {midi,hand,start:startSeconds,duration:fullDuration*(staccato?.5:1),velocity:velocity??dynamic?.velocity??76};
   });
   const rolls=new Map<string,number[]>();
   raw.forEach((n,i)=>{if(n.arpeggio){const key=`${n.start}:${n.arpeggio}`;const group=rolls.get(key)??[];group.push(i);rolls.set(key,group);}});
