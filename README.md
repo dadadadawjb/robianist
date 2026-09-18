@@ -2,7 +2,7 @@
 
 ![logo](public/logo.png)
 
-_A roboticist that happens to be a pianist, in your browser._
+*A roboticist that happens to be a pianist, in your browser.*
 
 ## Demo
 
@@ -16,7 +16,7 @@ Built with React, Next.js, Three.js, and React Three Fiber.
 
 The scene is [assembled](https://r3f.docs.pmnd.rs/) as a browser-based [3D stage](https://threejs.org/) containing a procedurally modeled grand piano, bench, lighting, and cameras.
 The [Unitree G1 humanoid](https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description) and [Wuji hands](https://github.com/wuji-technology/wuji-description/tree/main/hand) are [imported](https://github.com/gkjohnson/urdf-loaders) from URDF and STL assets.
-Preset or user-uploaded MusicXML/MXL scores are [parsed](lib/score.ts) into [timed piano-note events](lib/music.ts), [rendered](https://opensheetmusicdisplay.github.io/) as synchronized sheet music, and [scheduled](lib/player.ts) with [Web Audio](lib/audio.ts).
+Preset or user-uploaded MusicXML/MXL scores are [parsed](lib/score.ts) into [timed piano-note events](lib/music.ts), [rendered](https://opensheetmusicdisplay.github.io/) as synchronized sheet music, and [scheduled](lib/player.ts) with [sampled piano web audio](https://danigb.github.io/smplr/).
 The [fingering planner](https://github.com/marcomusy/pianoplayer) assigns playable left- and right-hand contacts while preserving chord ordering, sustained notes, substitutions, and short lift gaps before repeated attacks.
 For each hand, custom [seated-pose logic](lib/playing-pose.ts) first establishes a relaxed finger posture, curved ready poses for inactive fingers, fingertip-to-wrist offsets, and a wrist orientation aligned to the keyboard.
 Active fingertip targets follow the tilted key surface, with longer fingers landing slightly deeper on the keys. The wrist starts preparing for nearby attacks, while curved idle-finger poses avoid the hyperextended joints produced by vertical fingertip lifting.
@@ -28,9 +28,7 @@ The [damper pedal](lib/pedal.ts) extends audio decay after a finger releases a k
 >
 > The demo does not validate balance, collision avoidance, or the reachability of every note. It directly resets joint configurations for visualization rather than executing motions through a robot controller, and should not be interpreted as a physically valid or deployable control system.
 >
-> Audio playback and robot motion are driven independently; neither directly controls or causes the other.
-
-Use the Speed control to play at 0.5×–2× without changing pitch. Audio, sheet music and robot animation share the adjusted score clock. The timeline shows score time. Changing speed during a held note resumes it with the same approximate tail used for seeking.
+> Audio playback and robot motion are driven independently; neither directly controls or causes the other. But audio, sheet music and robot animation share the adjusted score clock.
 
 ### How to run
 
@@ -41,9 +39,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. After the stage loads, piano samples are downloaded and decoded in the background from `smpldsnds.github.io`; an internet connection is required. Audio is enabled only when Play is clicked. If samples are still loading, playback waits until they are ready. Samples are reused for subsequent playback and score changes while the page remains open. If loading fails, check the connection and press Play to retry.
-
-Production and checks:
+Open http://localhost:3000. Production and checks:
 
 ```sh
 npm test
@@ -51,5 +47,3 @@ npm run build
 ```
 
 The production build exports a static site to `out/`. Serve that directory with a static HTTP server; `next start` is not supported with static export.
-
-The bundled If Only... score applies each dynamic marking to both piano staves for balanced playback.
