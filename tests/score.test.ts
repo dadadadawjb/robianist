@@ -253,21 +253,25 @@ test('paired crescendo and diminuendo wedges interpolate their staff and retain 
   );
 });
 
-test('hairpin wedges must be paired and cannot overlap on one staff', () => {
+test('hairpin wedges must be paired and consecutive hairpins close the previous one', () => {
   const wedge = (type: string) =>
     `<direction><direction-type><wedge type="${type}"/></direction-type></direction>`;
+
+  // A genuinely unclosed hairpin is still invalid.
   assert.throws(
-    () => parseScore(wrap(`<measure>${wedge('crescendo')}${note()}</measure>`)),
+    () => parseScore(
+      wrap(`<measure>${wedge('crescendo')}${note()}</measure>`)
+    ),
     /stop wedge/,
   );
-  assert.throws(
-    () =>
-      parseScore(
-        wrap(
-          `<measure>${wedge('crescendo')}${note()}${wedge('diminuendo')}${note()}${wedge('stop')}</measure>`,
-        ),
+
+  // Starting a new hairpin implicitly closes the previous one.
+  assert.doesNotThrow(() =>
+    parseScore(
+      wrap(
+        `<measure>${wedge('crescendo')}${note()}${wedge('diminuendo')}${note()}${wedge('stop')}</measure>`,
       ),
-    /previous one stops/,
+    ),
   );
 });
 
