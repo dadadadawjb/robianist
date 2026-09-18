@@ -183,13 +183,24 @@ export function parseScore(xml: string, id = 'upload'): Song {
 
           const key = `${staff || '*'}:${number}`;
 
-          if (type === 'crescendo' || type === 'diminuendo') {
-            if (openHairpins.has(key))
-              throw new Error('A hairpin starts before the previous one stops.');
-            openHairpins.set(key, {
-              start: beat,
+          if(type==='crescendo'||type==='diminuendo'){
+            const previous=openHairpins.get(key);
+
+            if(previous){
+              if(beat>previous.start){
+                hairpins.push({
+                  ...previous,
+                  end:beat
+                });
+              }
+
+              openHairpins.delete(key);
+            }
+
+            openHairpins.set(key,{
+              start:beat,
               staff,
-              type,
+              type
             });
           }
 
