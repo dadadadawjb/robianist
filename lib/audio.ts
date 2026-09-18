@@ -1,44 +1,57 @@
-import { frequency, type Note, type PedalEvent } from './music.ts';
+import type { Smplr } from 'smplr';
+import type { Note, PedalEvent } from './music.ts';
 import { soundingEnd } from './pedal.ts';
 
-// Queue only the next quarter-second, rather than thousands of future oscillators.
-export function createNoteScheduler(ctx:AudioContext,output:AudioNode,notes:Note[],offset:number,origin:number,pedals:PedalEvent[]=[]) {
-  let index=0;
-  const voices=new Map<OscillatorNode,GainNode>();
+// Queue only the next quarter-second, rather than the whole score.
+export function createNoteScheduler(
+  ctx: AudioContext,
+  piano: Pick<Smplr, 'start' | 'stop' | 'scheduler'>,
+  notes: Note[],
+  offset: number,
+  origin: number,
+  pedals: PedalEvent[] = [],
+  speed = 1,
+) {
+  let index = 0,
+    stopped = false;
+  const releases = new Map<number, number>();
   function pump() {
-    const now=ctx.currentTime;
-    const horizon=now+.25;
-    while(index<notes.length&&origin+notes[index].start-offset<=horizon) {
-      const note=notes[index++];
-      if(note.velocity===0)continue;
-      const release=soundingEnd(note,pedals);
-      const end=origin+release-offset;
-      const start=Math.max(now+.005,origin+Math.max(0,note.start-offset));
-      if(end<=start)continue;
-      [1,2,3,4,6].forEach((harmonic,i)=>{
-        const oscillator=ctx.createOscillator(),gain=ctx.createGain();
-        oscillator.frequency.value=frequency(note.midi)*harmonic;
-        const velocity=(note.velocity??76)/76;
-        const level=.19*[1,.38,.16,.08,.025][i]*velocity**1.6*Math.min(1.3,velocity**(i*.12));
-        const decay=1.5+3*(108-note.midi)/87;
-        const age=Math.max(0,start-(origin+note.start-offset));
-        const amplitude=(t:number)=>Math.max(.00001,level*Math.exp(-t/decay));
-        gain.gain.setValueAtTime(age>0?amplitude(age):0,start);
-        gain.gain.linearRampToValueAtTime(amplitude(age),start+Math.min(.006,(end-start)/2));
-        gain.gain.exponentialRampToValueAtTime(amplitude(release-note.start),end);
-        gain.gain.exponentialRampToValueAtTime(Math.max(.000001,amplitude(release-note.start)*.001),end+.16);
-        oscillator.connect(gain);gain.connect(output);
-        oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();voices.delete(oscillator);};
-        voices.set(oscillator,gain);
-        oscillator.start(start);oscillator.stop(end+.2);
+    if (stopped) return;
+    const now = ctx.currentTime;
+    const horizon = now + 0.25;
+    while (index < notes.length && origin + (notes[index].start - offset) / speed <= horizon) {
+      const note = notes[index++];
+      if (note.velocity === 0) continue;
+      const end = origin + (soundingEnd(note, pedals) - offset) / speed;
+      const start = Math.max(now + 0.005, origin + Math.max(0, note.start - offset) / speed);
+      if (end <= start) continue;
+      const age = Math.max(0, start - (origin + (note.start - offset) / speed));
+      // smplr has no per-note sample offset; approximate resumed tails with a softer attack.
+      const decay = 1.5 + (3 * (108 - note.midi)) / 87;
+      const velocity = Math.max(1, Math.round((note.velocity ?? 76) * Math.exp(-age / decay)));
+      const stopId = index;
+      piano.start({
+        note: note.midi,
+        velocity,
+        time: start,
+        stopId,
+        ampRelease: 0.16,
+        onEnded: () => releases.delete(stopId),
       });
+      releases.set(stopId, end);
     }
+    // smplr 1.0 cannot override a scheduled release: only arm releases one tick ahead.
+    for (const [stopId, end] of releases)
+      if (end <= now + 0.025) {
+        piano.stop({ stopId, time: Math.max(now, end) });
+        releases.delete(stopId);
+      }
   }
   function stop() {
-    for(const [oscillator,gain] of voices) {
-      oscillator.onended=null;oscillator.stop();oscillator.disconnect();gain.disconnect();
-    }
-    voices.clear();
+    stopped = true;
+    piano.scheduler.stop(); // Cancel notes that smplr has not dispatched yet.
+    piano.stop();
+    releases.clear();
   }
-  return {pump,stop};
+  return { pump, stop };
 }

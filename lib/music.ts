@@ -1,10 +1,31 @@
 import type { Tempo } from './score.ts';
-export type Note = { midi: number; start: number; duration: number; hand: 'left' | 'right'; velocity?: number };
+export type Note = {
+  midi: number;
+  start: number;
+  duration: number;
+  hand: 'left' | 'right';
+  velocity?: number;
+};
 export type PedalEvent = { time: number; down: boolean };
-export type Song = { id: string; title: string; subtitle: string; bpm: number; notes: Note[]; duration: number; xml: string; tempos: Tempo[]; pedals: PedalEvent[] };
+export type Song = {
+  id: string;
+  title: string;
+  subtitle: string;
+  bpm: number;
+  notes: Note[];
+  duration: number;
+  xml: string;
+  tempos: Tempo[];
+  pedals: PedalEvent[];
+};
 export const frequency = (midi: number) => 440 * 2 ** ((midi - 69) / 12);
-export const noteName = (midi: number) => ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'][midi % 12] + (Math.floor(midi / 12) - 1);
-export const isBlack = (midi: number) => [1,3,6,8,10].includes(midi % 12);
-const whites = Array.from({length: 88}, (_,i) => i + 21).filter(m => !isBlack(m));
-export const keyPitch = .025;
-export const keyX = (midi: number) => { const index = whites.filter(m => m < midi).length; return (index - (isBlack(midi) ? .5 : 0) - 25.5) * keyPitch; };
+export const noteName = (midi: number) =>
+  ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'][midi % 12] +
+  (Math.floor(midi / 12) - 1);
+export const isBlack = (midi: number) => [1, 3, 6, 8, 10].includes(midi % 12);
+const whites = Array.from({ length: 88 }, (_, i) => i + 21).filter((m) => !isBlack(m));
+export const keyPitch = 0.025;
+export const keyX = (midi: number) => {
+  const index = whites.filter((m) => m < midi).length;
+  return (index - (isBlack(midi) ? 0.5 : 0) - 25.5) * keyPitch;
+};
